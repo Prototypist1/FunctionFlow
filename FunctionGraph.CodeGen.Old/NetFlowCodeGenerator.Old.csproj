@@ -49,15 +49,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FunctionGraph.Strong\FunctionGraph.Strong.Old.csproj">
-      <Project>{8DF9A293-131F-4179-AE26-E7B91D541F41}</Project>
-      <Name>FunctionGraph.Strong.Old</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FunctionGraph\FunctionGraph.Old.csproj">
-      <Project>{f8492a79-e040-47c3-a8c9-9a1a45616305}</Project>
-      <Name>FunctionGraph.Old</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

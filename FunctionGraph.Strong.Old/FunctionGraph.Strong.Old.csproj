@@ -46,11 +46,5 @@
     <Compile Include="IHold.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FunctionGraph\FunctionGraph.Old.csproj">
-      <Project>{f8492a79-e040-47c3-a8c9-9a1a45616305}</Project>
-      <Name>FunctionGraph.Old</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
