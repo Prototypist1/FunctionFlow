@@ -16,7 +16,7 @@ namespace Prototypist.FunctionGraph
         
     public partial class FlowBuilder : IFlowBuilder
     {
-        public MethodInfo Parallel { get; set; }
+        public MethodInfo Parallel { get; set; } = null;
 
         private readonly Dictionary<Type, Delegate> sources = new Dictionary<Type, Delegate>();
         private readonly Dictionary<Type, Expression> constants = new Dictionary<Type, Expression>();
@@ -25,7 +25,6 @@ namespace Prototypist.FunctionGraph
 
         public FlowBuilder()
         {
-            Parallel = SystemParallel();
         }
 
         #region Configure
@@ -76,32 +75,32 @@ namespace Prototypist.FunctionGraph
             }
         }
 
-        public void AddStepUnpack<T1, T2>(Delegate expression)
+        public void AddStep<T1, T2>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1),typeof(T2)}));
         }
 
-        public void AddStepUnpack<T1, T2, T3>(Delegate expression)
+        public void AddStep<T1, T2, T3>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3)}));
         }
 
-        public void AddStepUnpack<T1, T2, T3, T4>(Delegate expression)
+        public void AddStep<T1, T2, T3, T4>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }));
         }
 
-        public void AddStepUnpack<T1, T2, T3, T4, T5>(Delegate expression)
+        public void AddStep<T1, T2, T3, T4, T5>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) }));
         }
 
-        public void AddStepUnpack<T1, T2, T3, T4, T5, T6>(Delegate expression)
+        public void AddStep<T1, T2, T3, T4, T5, T6>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6) }));
         }
 
-        public void AddStepUnpack<T1, T2, T3, T4, T5, T6, T7>(Delegate expression)
+        public void AddStep<T1, T2, T3, T4, T5, T6, T7>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7)}));
         }
@@ -129,7 +128,7 @@ namespace Prototypist.FunctionGraph
 
             return (T)(BuildExpression(
                 FromParams(parameters, FromConstants(FromSources(FromContainer()))),
-                SystemParallel(),
+                Parallel,
                 new[] { typeof(T) },
                 SingleReturn(typeof(T)),
                 parameters,
@@ -342,8 +341,6 @@ namespace Prototypist.FunctionGraph
             return null;
         }
 
-        private static MethodInfo SystemParallel() => typeof(Parallel).GetMethods().Where(x => x.Name == "Invoke" && x.GetParameters().Count() == 1).Single();
-
 
         #endregion
 
@@ -392,10 +389,17 @@ namespace Prototypist.FunctionGraph
                 }
                 else
                 {
-                    var lamddasParameter = Expression.Constant(group.Select(x => Expression.Lambda<Action>(Expression.Block(MakeSingle(x)))).Select(x => x.Compile()).ToArray());
-                    return new List<Expression> {
-                        Expression.Call(parallel, lamddasParameter)
-                    };
+                    if (parallel == null)
+                    {
+                        return group.SelectMany(x => MakeSingle(x));
+                    }
+                    else
+                    {
+                        var lamddasParameter = Expression.Constant(group.Select(x => Expression.Lambda<Action>(Expression.Block(MakeSingle(x)))).Select(x => x.Compile()).ToArray());
+                            return new List<Expression> {
+                            Expression.Call(parallel, lamddasParameter)
+                        };
+                    }
                 }
             }).ToList();
 

@@ -1,4 +1,4 @@
-using NetFlow;
+using Prototypist.FunctionGraph.Strong;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,15 +11,15 @@ namespace NetFlowCodeGenerator
 
     class Program
     {
-        private const string _FlowBuilderProp = nameof(NetFlow.Holder.FlowBuilder);
-        private const string _Holder = nameof(NetFlow.Holder);
-        private const string _HolderBase = nameof(NetFlow.HolderBase);
-        private const string _FlowBuilderType = nameof(NetFlow.FlowBuilder);
-        private const string _Set = nameof(NetFlow.Holder.FlowBuilder.Set);
-        private const string _Do = nameof(NetFlow.Holder.FlowBuilder.Do);
-        private const string _IHold = nameof(NetFlow.IHold);
-        private const string _IHolder = nameof(IHolder);
-        private static readonly string _IHack = Name(typeof(NetFlow.IHack<,>));
+        private const string _FlowBuilderProp = nameof(Prototypist.FunctionGraph.Strong.Holder.FlowBuilder);
+        private const string _Holder = nameof(Prototypist.FunctionGraph.Strong.Holder);
+        private const string _HolderBase = nameof(Prototypist.FunctionGraph.Strong.HolderBase);
+        private const string _FlowBuilderType = nameof(Prototypist.FunctionGraph.FlowBuilder);
+        private const string _Set = nameof(Prototypist.FunctionGraph.FlowBuilder.SetConstant);
+        private const string _Do = nameof(Prototypist.FunctionGraph.FlowBuilder.AddStep);
+        private const string _IHold = nameof(Prototypist.FunctionGraph.Strong.IHold);
+        private const string _IHolder = nameof(Prototypist.FunctionGraph.Strong.IHolder);
+        private static readonly string _IHack = Name(typeof(Prototypist.FunctionGraph.Strong.IHack<,>));
         private const int MaxOutputSize = 2;
         private const int MaxClassSize = 12;
 
@@ -48,14 +48,11 @@ namespace NetFlowCodeGenerator
             //x.Add(() => 1);
             //IHolder<Frog> y = new Holder<Frog>(new Frog(1));//
             //y.Add(() => 1);
-            var what =  new Holder<Frog>(new Frog(1));
-            var whatWhat = what.Add(() => 1);
-            var www = whatWhat.Update((int i) => i + 2);
+            //var what =  new Holder<Frog>(new Frog(1));
+            //var whatWhat = what.Add(() => 1);
+            //var www = whatWhat.Update((int i) => i + 2);
             ////HolderExtensions.Add<Holder<Frog>,Frog,int>(what, () => 1);
-
-
-
-
+            
             //Holder<Frog> what2 = new Holder<Frog>(new Frog(1));
             //what2.Add((Frog f) => 1);
 
@@ -91,7 +88,7 @@ namespace NetFlowCodeGenerator
                 holders += Interface(classSize);
             }
             var holdersText = WrapNameSpace(holders);
-            File.WriteAllText("../../../NetFlow/Generated-Holders.cs", holdersText);
+            File.WriteAllText("../../../FunctionGraph.Strong/Generated-Holders.cs", holdersText);
 
 
             var extensions = "";
@@ -134,7 +131,7 @@ namespace NetFlowCodeGenerator
             }
 
             var extensionsText = WrapNameSpace(WrapExtensions(extensions));
-            File.WriteAllText("../../../NetFlow/Generated-HolderExtensions.cs", extensionsText);
+            File.WriteAllText("../../../FunctionGraph.Strong/Generated-HolderExtensions.cs", extensionsText);
             
         }
 
@@ -151,8 +148,9 @@ namespace NetFlowCodeGenerator
         {
             return $@"
 using System;
+using Prototypist.FunctionGraph;
 
-namespace NetFlow
+namespace Prototypist.FunctionGraph.Strong
 {{
 {inner}
 }}";

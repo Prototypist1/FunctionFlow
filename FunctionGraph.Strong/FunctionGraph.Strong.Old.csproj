@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4762352E-E7F7-4C0A-9432-B59939E55685}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>NetFlowCodeGenerator</RootNamespace>
-    <AssemblyName>NetFlowCodeGenerator</AssemblyName>
+    <ProjectGuid>{8DF9A293-131F-4179-AE26-E7B91D541F41}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FunctionGraph.Strong</RootNamespace>
+    <AssemblyName>FunctionGraph.Strong</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,16 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Generated-HolderExtensions.cs" />
+    <Compile Include="Generated-Holders.cs" />
+    <Compile Include="Holder.cs" />
+    <Compile Include="IHold.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FunctionGraph\FunctionGraph.csproj">
+    <ProjectReference Include="..\FunctionGraph\FunctionGraph.Old.csproj">
       <Project>{f8492a79-e040-47c3-a8c9-9a1a45616305}</Project>
-      <Name>FunctionGraph</Name>
+      <Name>FunctionGraph.Old</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

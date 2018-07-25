@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph.Strong", "FunctionGraph.Strong\FunctionGraph.Strong.csproj", "{8DF9A293-131F-4179-AE26-E7B91D541F41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph.Strong.Old", "FunctionGraph.Strong\FunctionGraph.Strong.Old.csproj", "{8DF9A293-131F-4179-AE26-E7B91D541F41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph", "FunctionGraph\FunctionGraph.csproj", "{F8492A79-E040-47C3-A8C9-9A1A45616305}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph.Old", "FunctionGraph\FunctionGraph.Old.csproj", "{F8492A79-E040-47C3-A8C9-9A1A45616305}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFlowCodeGenerator", "FunctionGraph.CodeGen\NetFlowCodeGenerator.csproj", "{4762352E-E7F7-4C0A-9432-B59939E55685}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFlowCodeGenerator.Old", "FunctionGraph.CodeGen\NetFlowCodeGenerator.Old.csproj", "{4762352E-E7F7-4C0A-9432-B59939E55685}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

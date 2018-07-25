@@ -1,5 +1,6 @@
 
 using System;
+using Prototypist.FunctionGraph;
 
 namespace Prototypist.FunctionGraph.Strong
 {

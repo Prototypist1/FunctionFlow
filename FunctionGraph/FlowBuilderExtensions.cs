@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Prototypist.FunctionGraph
 {
     public static partial class FlowBuilderExtensions {
+
+        private static Lazy<MethodInfo> parallelInboke = new Lazy<MethodInfo>(() => typeof(Parallel).GetMethods().Where(x => x.Name == "Invoke" && x.GetParameters().Count() == 1).Single());
 
         public static IFlowBuilder Set<T>(this IFlowBuilder self, T t) {
             self.SetConstant<T>(t);
@@ -16,9 +20,9 @@ namespace Prototypist.FunctionGraph
             return self;
         }
 
-        public static IFlowBuilder RunInSeries(this IFlowBuilder self)
+        public static IFlowBuilder RunInParallel(this IFlowBuilder self)
         {
-            self.Parallel = typeof(DontParallel).GetMethods().Where(x => x.Name == "Invoke" && x.GetParameters().Count() == 1).Single();
+            self.Parallel = parallelInboke.Value;
             return self;
         }
 

@@ -1,5 +1,6 @@
 
 using System;
+using Prototypist.FunctionGraph;
 
 namespace Prototypist.FunctionGraph.Strong
 {
@@ -60,7 +61,7 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
+            FlowBuilder.SetConstant(t1);
         }
     }
 
@@ -72,8 +73,8 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
         }
     }
 
@@ -85,9 +86,9 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
         }
     }
 
@@ -99,10 +100,10 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3, T4 t4) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
-            FlowBuilder.SetParameter(t4);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
+            FlowBuilder.SetConstant(t4);
         }
     }
 
@@ -114,11 +115,11 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
-            FlowBuilder.SetParameter(t4);
-            FlowBuilder.SetParameter(t5);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
+            FlowBuilder.SetConstant(t4);
+            FlowBuilder.SetConstant(t5);
         }
     }
 
@@ -130,12 +131,12 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
-            FlowBuilder.SetParameter(t4);
-            FlowBuilder.SetParameter(t5);
-            FlowBuilder.SetParameter(t6);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
+            FlowBuilder.SetConstant(t4);
+            FlowBuilder.SetConstant(t5);
+            FlowBuilder.SetConstant(t6);
         }
     }
 
@@ -147,13 +148,13 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
-            FlowBuilder.SetParameter(t4);
-            FlowBuilder.SetParameter(t5);
-            FlowBuilder.SetParameter(t6);
-            FlowBuilder.SetParameter(t7);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
+            FlowBuilder.SetConstant(t4);
+            FlowBuilder.SetConstant(t5);
+            FlowBuilder.SetConstant(t6);
+            FlowBuilder.SetConstant(t7);
         }
     }
 
@@ -165,14 +166,14 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
-            FlowBuilder.SetParameter(t4);
-            FlowBuilder.SetParameter(t5);
-            FlowBuilder.SetParameter(t6);
-            FlowBuilder.SetParameter(t7);
-            FlowBuilder.SetParameter(t8);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
+            FlowBuilder.SetConstant(t4);
+            FlowBuilder.SetConstant(t5);
+            FlowBuilder.SetConstant(t6);
+            FlowBuilder.SetConstant(t7);
+            FlowBuilder.SetConstant(t8);
         }
     }
 
@@ -184,15 +185,15 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
-            FlowBuilder.SetParameter(t4);
-            FlowBuilder.SetParameter(t5);
-            FlowBuilder.SetParameter(t6);
-            FlowBuilder.SetParameter(t7);
-            FlowBuilder.SetParameter(t8);
-            FlowBuilder.SetParameter(t9);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
+            FlowBuilder.SetConstant(t4);
+            FlowBuilder.SetConstant(t5);
+            FlowBuilder.SetConstant(t6);
+            FlowBuilder.SetConstant(t7);
+            FlowBuilder.SetConstant(t8);
+            FlowBuilder.SetConstant(t9);
         }
     }
 
@@ -204,16 +205,16 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
-            FlowBuilder.SetParameter(t4);
-            FlowBuilder.SetParameter(t5);
-            FlowBuilder.SetParameter(t6);
-            FlowBuilder.SetParameter(t7);
-            FlowBuilder.SetParameter(t8);
-            FlowBuilder.SetParameter(t9);
-            FlowBuilder.SetParameter(t10);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
+            FlowBuilder.SetConstant(t4);
+            FlowBuilder.SetConstant(t5);
+            FlowBuilder.SetConstant(t6);
+            FlowBuilder.SetConstant(t7);
+            FlowBuilder.SetConstant(t8);
+            FlowBuilder.SetConstant(t9);
+            FlowBuilder.SetConstant(t10);
         }
     }
 
@@ -225,17 +226,17 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
-            FlowBuilder.SetParameter(t4);
-            FlowBuilder.SetParameter(t5);
-            FlowBuilder.SetParameter(t6);
-            FlowBuilder.SetParameter(t7);
-            FlowBuilder.SetParameter(t8);
-            FlowBuilder.SetParameter(t9);
-            FlowBuilder.SetParameter(t10);
-            FlowBuilder.SetParameter(t11);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
+            FlowBuilder.SetConstant(t4);
+            FlowBuilder.SetConstant(t5);
+            FlowBuilder.SetConstant(t6);
+            FlowBuilder.SetConstant(t7);
+            FlowBuilder.SetConstant(t8);
+            FlowBuilder.SetConstant(t9);
+            FlowBuilder.SetConstant(t10);
+            FlowBuilder.SetConstant(t11);
         }
     }
 
@@ -247,18 +248,18 @@ namespace Prototypist.FunctionGraph.Strong
         }
         public Holder(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12) {
             FlowBuilder = new FlowBuilder();
-            FlowBuilder.SetParameter(t1);
-            FlowBuilder.SetParameter(t2);
-            FlowBuilder.SetParameter(t3);
-            FlowBuilder.SetParameter(t4);
-            FlowBuilder.SetParameter(t5);
-            FlowBuilder.SetParameter(t6);
-            FlowBuilder.SetParameter(t7);
-            FlowBuilder.SetParameter(t8);
-            FlowBuilder.SetParameter(t9);
-            FlowBuilder.SetParameter(t10);
-            FlowBuilder.SetParameter(t11);
-            FlowBuilder.SetParameter(t12);
+            FlowBuilder.SetConstant(t1);
+            FlowBuilder.SetConstant(t2);
+            FlowBuilder.SetConstant(t3);
+            FlowBuilder.SetConstant(t4);
+            FlowBuilder.SetConstant(t5);
+            FlowBuilder.SetConstant(t6);
+            FlowBuilder.SetConstant(t7);
+            FlowBuilder.SetConstant(t8);
+            FlowBuilder.SetConstant(t9);
+            FlowBuilder.SetConstant(t10);
+            FlowBuilder.SetConstant(t11);
+            FlowBuilder.SetConstant(t12);
         }
     }
 
