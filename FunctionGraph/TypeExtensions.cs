@@ -9,50 +9,15 @@ namespace Prototypist.FunctionGraph
 
         public static bool IsAction(this Type funcType)
         {
-            return funcType == typeof(Action) || new[] {
-                    typeof(Action<>),
-                    typeof(Action<,>),
-                    typeof(Action<,,>),
-                    typeof(Action<,,,>),
-                    typeof(Action<,,,,>),
-                    typeof(Action<,,,,,>),
-                    typeof(Action<,,,,,,>),
-                    typeof(Action<,,,,,,,>),
-                    typeof(Action<,,,,,,,,>),
-                    typeof(Action<,,,,,,,,,>),
-                    typeof(Action<,,,,,,,,,,>),
-                    typeof(Action<,,,,,,,,,,,>),
-                    typeof(Action<,,,,,,,,,,,,>),
-                    typeof(Action<,,,,,,,,,,,,,>),
-                    typeof(Action<,,,,,,,,,,,,,,>),
-                    typeof(Action<,,,,,,,,,,,,,,,>),
-                }.Contains(funcType.GetGenericTypeDefinition());
+            return funcType == typeof(Action) || actionsArray.Value.Contains(funcType.GetGenericTypeDefinition());
         }
 
         public static bool IsFunc(this Type funcType)
         {
-            return funcType.IsGenericType && new[] {
-                    typeof(Func<>),
-                    typeof(Func<,>),
-                    typeof(Func<,,>),
-                    typeof(Func<,,,>),
-                    typeof(Func<,,,,>),
-                    typeof(Func<,,,,,>),
-                    typeof(Func<,,,,,,>),
-                    typeof(Func<,,,,,,,>),
-                    typeof(Func<,,,,,,,,>),
-                    typeof(Func<,,,,,,,,,>),
-                    typeof(Func<,,,,,,,,,,>),
-                    typeof(Func<,,,,,,,,,,,>),
-                    typeof(Func<,,,,,,,,,,,,>),
-                    typeof(Func<,,,,,,,,,,,,,>),
-                    typeof(Func<,,,,,,,,,,,,,,>),
-                    typeof(Func<,,,,,,,,,,,,,,,>),
-                    typeof(Func<,,,,,,,,,,,,,,,,>),
-                }.Contains(funcType.GetGenericTypeDefinition());
+            return funcType.IsGenericType && functionsArray.Value.Contains(funcType.GetGenericTypeDefinition());
         }
         
-        public static Type FuncReturn(this Type funcType)
+        public static Type FuncReturnOrNull(this Type funcType)
         {
             if (funcType.IsFunc())
             {
@@ -76,7 +41,47 @@ namespace Prototypist.FunctionGraph
             }
             throw new Exception($"{funcType} should be an {typeof(Action)} or {typeof(Func<>)}");
         }
-        
+
+        private static readonly Lazy<Type[]> functionsArray = new Lazy<Type[]>(() => new Type[] {
+            typeof(Func<>),
+                    typeof(Func<,>),
+                    typeof(Func<,,>),
+                    typeof(Func<,,,>),
+                    typeof(Func<,,,,>),
+                    typeof(Func<,,,,,>),
+                    typeof(Func<,,,,,,>),
+                    typeof(Func<,,,,,,,>),
+                    typeof(Func<,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,,,,,>),
+        });
+
+        private static readonly Lazy<Type[]> actionsArray = new Lazy<Type[]>(() => new Type[] {
+            typeof(Func<>),
+                    typeof(Func<,>),
+                    typeof(Func<,,>),
+                    typeof(Func<,,,>),
+                    typeof(Func<,,,,>),
+                    typeof(Func<,,,,,>),
+                    typeof(Func<,,,,,,>),
+                    typeof(Func<,,,,,,,>),
+                    typeof(Func<,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,,,,>),
+                    typeof(Func<,,,,,,,,,,,,,,,,>),
+        });
+
     }
 
 

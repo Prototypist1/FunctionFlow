@@ -96,7 +96,7 @@ namespace Prototypist.FunctionGraph
         [Fact]
         public void SetTest()
         {
-            var res = new FlowBuilder().SetParameter(5).Run<int>();
+            var res = new FlowBuilder().SetConstant(5).Run<int>();
 
             Assert.Equal(5, res);
         }
@@ -113,7 +113,7 @@ namespace Prototypist.FunctionGraph
         [Fact]
         public void SourceTest()
         {
-            var res = new FlowBuilder().SetParameterSource<Func<int,string>>(x=>5+"").Run<string>(5);
+            var res = new FlowBuilder().SetSource<Func<int,string>>(x=>5+"").Run<string>(5);
 
             Assert.Equal("5", res);
         }

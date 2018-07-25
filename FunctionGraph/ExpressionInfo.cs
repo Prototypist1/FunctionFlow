@@ -12,24 +12,17 @@ namespace Prototypist.FunctionGraph
         {
             public readonly Expression backing;
             public readonly Expression[] Inputs;
-            public readonly Type[] ParameterTypes;
-            public readonly Type ReturnType;
             public int order = 0;
             public Expression Result = null;
             public readonly List<ExpressionInfo> waitsOn = new List<ExpressionInfo>();
-            internal readonly bool Packed;
+            public readonly Type[] returnTypes;
+            public readonly Type[] ParameterTypes;
 
             public ExpressionInfo(WorkItem workItem)
             {
                 this.backing = Expression.Constant(workItem.todo) ?? throw new ArgumentNullException(nameof(workItem));
-                var funcType = workItem.todo.GetType();
-                this.Packed = workItem.unpack;
-
-                ParameterTypes = funcType.Parameters();
-                if (funcType.IsFunc())
-                {
-                    ReturnType = funcType.FuncReturn();
-                }
+                this.returnTypes = workItem.returnTypes;
+                this.ParameterTypes = workItem.todo.GetType().Parameters();
                 this.Inputs = new Expression[ParameterTypes.Count()];
             }
 

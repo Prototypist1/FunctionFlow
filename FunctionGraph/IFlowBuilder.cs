@@ -8,8 +8,8 @@ namespace Prototypist.FunctionGraph
     {
         MethodInfo Parallel { get; set; }
 
-        void SetParameter<T>(T t);
-        void SetParameterSource<T>(T t) where T : Delegate;
+        void SetConstant<T>(T t);
+        void SetSource<T>(T t) where T : Delegate;
         void AddStep(Delegate expression);
         void SetContainer(IContainer container);
 

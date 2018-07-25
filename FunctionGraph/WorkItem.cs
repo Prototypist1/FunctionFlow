@@ -9,12 +9,12 @@ namespace Prototypist.FunctionGraph
         private class WorkItem
         {
             public readonly Delegate todo;
-            public readonly bool unpack;
+            public readonly Type[] returnTypes;
 
-            public WorkItem(Delegate todo, bool unpack)
+            public WorkItem(Delegate todo, Type[] types)
             {
                 this.todo = todo ?? throw new ArgumentNullException(nameof(todo));
-                this.unpack = unpack;
+                this.returnTypes = types;
             }
         }
     }

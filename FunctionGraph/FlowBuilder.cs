@@ -13,19 +13,7 @@ namespace Prototypist.FunctionGraph
     {
         T Get<T>();
     }
-
-    // I am a bit inconsistant WRT runtime typing vs buildtime typing
-    // I think I should use build time 
-
-    // you can make sources loop pretty easy
-    // A -> B
-    // B -> A
-    // or just
-    // A -> A
-    
-    // you can add constants and sources for the same type
-    // this is undefined behavoir
-
+        
     public partial class FlowBuilder : IFlowBuilder
     {
         public MethodInfo Parallel { get; set; }
@@ -34,7 +22,7 @@ namespace Prototypist.FunctionGraph
         private readonly Dictionary<Type, Expression> constants = new Dictionary<Type, Expression>();
         private Func<Type, Expression> fallbackSource;
         private readonly List<WorkItem> todo = new List<WorkItem>();
-        
+
         public FlowBuilder()
         {
             Parallel = SystemParallel();
@@ -49,33 +37,79 @@ namespace Prototypist.FunctionGraph
             fallbackSource = (type) => Expression.Call(containerParameter, get.MakeGenericMethod(type));
         }
 
-        public void SetParameter<T>(T t)
+        public void SetConstant<T>(T t)
         {
-            constants[typeof(T)] = Expression.Constant(t);
+            var key = typeof(T);
+            if (sources.ContainsKey(key)) {
+                throw new Exception($"Source already set for {key}");
+            }
+            constants.Add(key, Expression.Constant(t));
         }
 
-
-
-        public void SetParameterSource<T>(T t)
+        // you can make sources loop pretty easy
+        // A -> B
+        // B -> A
+        // or just
+        // A -> A
+        // is it worth reflecting around and blocking loops?
+        // probably atleast worth throwing in BuildExpression
+        public void SetSource<T>(T t)
             where T : Delegate
         {
-            sources[typeof(T).FuncReturn()] = t;
+            var key = typeof(T).FuncReturnOrNull();
+            if (constants.ContainsKey(key))
+            {
+                throw new Exception($"Constant already set for {key}");
+            }
+            sources.Add(key, t);
         }
 
         public void AddStep(Delegate expression)
         {
-            todo.Add(new WorkItem(expression, false));
+            var returnType = expression.GetType().FuncReturnOrNull();
+            if (returnType == null)
+            {
+                todo.Add(new WorkItem(expression, new Type[0]));
+            }
+            else {
+                todo.Add(new WorkItem(expression, new[] { returnType }));
+            }
         }
 
-        public void ThenUnpack(Delegate expression)
+        public void AddStepUnpack<T1, T2>(Delegate expression)
         {
-            todo.Add(new WorkItem(expression, true));
+            todo.Add(new WorkItem(expression, new[] { typeof(T1),typeof(T2)}));
+        }
+
+        public void AddStepUnpack<T1, T2, T3>(Delegate expression)
+        {
+            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3)}));
+        }
+
+        public void AddStepUnpack<T1, T2, T3, T4>(Delegate expression)
+        {
+            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }));
+        }
+
+        public void AddStepUnpack<T1, T2, T3, T4, T5>(Delegate expression)
+        {
+            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) }));
+        }
+
+        public void AddStepUnpack<T1, T2, T3, T4, T5, T6>(Delegate expression)
+        {
+            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6) }));
+        }
+
+        public void AddStepUnpack<T1, T2, T3, T4, T5, T6, T7>(Delegate expression)
+        {
+            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7)}));
         }
 
         #endregion
 
         #region Build/Run
-        
+
         public void Run(params object[] inputs)
         {
             var parameters = inputs.Select(x => Expression.Parameter(x.GetType())).ToArray();
@@ -114,7 +148,7 @@ namespace Prototypist.FunctionGraph
                 parameters,
                 todo).Compile().DynamicInvoke(inputs));
         }
-        
+
         public (T1, T2, T3) Run<T1, T2, T3>(params object[] inputs)
         {
             var parameters = inputs.Select(x => Expression.Parameter(x.GetType())).ToArray();
@@ -132,7 +166,7 @@ namespace Prototypist.FunctionGraph
         {
             var parameters = inputs.Select(x => Expression.Parameter(x.GetType())).ToArray();
 
-            return (ValueTuple<T1, T2,T3,T4>)(BuildExpression(
+            return (ValueTuple<T1, T2, T3, T4>)(BuildExpression(
                 FromParams(parameters, FromConstants(FromSources(FromContainer()))),
                 Parallel,
                 new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) },
@@ -179,7 +213,7 @@ namespace Prototypist.FunctionGraph
                 parameters,
                 todo).Compile().DynamicInvoke(inputs));
         }
-        
+
         public T Build<T>() where T : Delegate
         {
             var parameters = typeof(T).Parameters().Select(x => Expression.Parameter(x)).ToArray();
@@ -188,15 +222,15 @@ namespace Prototypist.FunctionGraph
                 FromParams(parameters, FromConstants(FromSources(FromContainer()))),
                 Parallel,
                 GetReturns(typeof(T)),
-                typeof(T).FuncReturn() != null ? SingleReturn(typeof(T).FuncReturn()) : NoReturn(),
+                typeof(T).FuncReturnOrNull() != null ? SingleReturn(typeof(T).FuncReturnOrNull()) : NoReturn(),
                 parameters,
                 todo).Compile();
         }
-        
+
         #endregion
 
         #region Build/Run Help
-        
+
         private Func<Type, Func<Type, Expression>, Expression> FromParams(ParameterExpression[] parameters, Func<Type, Func<Type, Expression>, Expression> fallback)
         {
             return (type, searchCurrentContext) =>
@@ -252,7 +286,7 @@ namespace Prototypist.FunctionGraph
         private static Type[] GetReturns(Type type)
         {
 
-            var returnType = type.FuncReturn();
+            var returnType = type.FuncReturnOrNull();
 
             if (returnType == null)
             {
@@ -397,32 +431,33 @@ namespace Prototypist.FunctionGraph
                 var holdShit = Expression.Constant(Activator.CreateInstance(type));
                 return Expression.Field(holdShit, type.GetField($"thing"));
             }
-            
+
             Expression FindInput(ExpressionInfo expressionOrNull, Type parmType, int startAt)
             {
                 for (int j = startAt - 1; j >= 0; j--)
                 {
                     var sourceExpressionInfo = expressionInfos[j];
-                    if (sourceExpressionInfo.Packed)
+                    if (sourceExpressionInfo.returnTypes.Length > 1)
                     {
-                        // sourceExpressionInfo.ReturnType is valueType
+                        // sourceExpressionInfo.ReturnType is valueTuple
                         // we need to walk over it's members
-                        for (int k = 0; k < sourceExpressionInfo.ReturnType.GenericTypeArguments.Length; k++)
+                        for (int k = 0; k < sourceExpressionInfo.returnTypes.Length; k++)
                         {
-                            if (sourceExpressionInfo.ReturnType.GenericTypeArguments[k] == parmType)
+                            if (sourceExpressionInfo.returnTypes[k] == parmType)
                             {
                                 expressionOrNull?.waitsOn?.Add(sourceExpressionInfo);
+                                var tupleType = valueTypeArray.Value[sourceExpressionInfo.returnTypes.Length - 1].MakeGenericType(sourceExpressionInfo.returnTypes);
                                 if (sourceExpressionInfo.Result == null)
                                 {
-                                    sourceExpressionInfo.Result = GetVar(sourceExpressionInfo.ReturnType);
+                                    sourceExpressionInfo.Result = GetVar(tupleType);
                                 }
-                                return Expression.Field(sourceExpressionInfo.Result, sourceExpressionInfo.ReturnType.GetField("Item" + (k + 1)));
+                                return Expression.Field(sourceExpressionInfo.Result, tupleType.GetField("Item" + (k + 1)));
                             }
                         }
                     }
                     else
                     {
-                        if (sourceExpressionInfo.ReturnType == parmType)
+                        if (sourceExpressionInfo.returnTypes[0] == parmType)
                         {
                             expressionOrNull?.waitsOn?.Add(sourceExpressionInfo);
                             if (sourceExpressionInfo.Result == null)
@@ -436,9 +471,24 @@ namespace Prototypist.FunctionGraph
                 return getParameter(parmType, t => FindInput(null, t, startAt));
 
             }
-            
+
             #endregion
         }
+        
+        
+        #region Static
 
+        private static readonly Lazy<Type[]> valueTypeArray = new Lazy<Type[]>(() => {
+            return new Type[]{
+                    typeof(ValueTuple<>),
+                    typeof(ValueTuple<,>),
+                    typeof(ValueTuple<,,>),
+                    typeof(ValueTuple<,,,>),
+                    typeof(ValueTuple<,,,,>),
+                    typeof(ValueTuple<,,,,,>),
+                };
+            });
+
+        #endregion
     }
 }
