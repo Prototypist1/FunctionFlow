@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph.Strong", "Fun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph.Strong.CodeGen", "FunctionGraph.Strong.CodeGen\FunctionGraph.Strong.CodeGen.csproj", "{EEE2D861-3015-4143-83E8-73D4EC1F7B51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph.Test", "FunctionGraph.Test\FunctionGraph.Test.csproj", "{8836C40A-27C9-40A2-842D-8945366E86AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,22 @@ Global
 		{EEE2D861-3015-4143-83E8-73D4EC1F7B51}.Release|x64.Build.0 = Release|Any CPU
 		{EEE2D861-3015-4143-83E8-73D4EC1F7B51}.Release|x86.ActiveCfg = Release|Any CPU
 		{EEE2D861-3015-4143-83E8-73D4EC1F7B51}.Release|x86.Build.0 = Release|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|ARM.Build.0 = Debug|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|x64.Build.0 = Debug|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|x86.Build.0 = Debug|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|ARM.Build.0 = Release|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|x64.ActiveCfg = Release|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|x64.Build.0 = Release|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|x86.ActiveCfg = Release|Any CPU
+		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

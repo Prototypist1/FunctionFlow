@@ -14,7 +14,7 @@ namespace Prototypist.FunctionGraph
             return self;
         }
 
-        public static IFlowBuilder Container<T>(this IFlowBuilder self, IContainer container)
+        public static IFlowBuilder Container(this IFlowBuilder self, IContainer container)
         {
             self.SetContainer(container);
             return self;
@@ -26,6 +26,8 @@ namespace Prototypist.FunctionGraph
             return self;
         }
 
+        #region Source
+        
         public static IFlowBuilder Source<TResult>(this IFlowBuilder self, Func<TResult> func)
         {
             self.SetSource(func);
@@ -127,7 +129,11 @@ namespace Prototypist.FunctionGraph
             self.SetSource(func);
             return self;
         }
+
+        #endregion
         
+        #region Then Action
+
         public static IFlowBuilder Then(this IFlowBuilder self, Action todo)
         {
             self.AddStep(todo);
@@ -230,6 +236,10 @@ namespace Prototypist.FunctionGraph
             return self;
         }
 
+        #endregion
+        
+        #region Then Func
+
         public static IFlowBuilder Then<TResult>(this IFlowBuilder self, Func<TResult> todo)
         {
             self.AddStep(todo);
@@ -331,6 +341,627 @@ namespace Prototypist.FunctionGraph
             self.AddStep(todo);
             return self;
         }
+        
+        #endregion
+        
+        #region PackedThen
+
+        public static IFlowBuilder PackedThen<TR1, TR2>(this IFlowBuilder self, Func<(TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, TR1, TR2>(this IFlowBuilder self, Func<T1, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TR1, TR2>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, (TR1, TR2)> todo)
+        {
+            self.AddStep<TR1, TR2>(todo);
+            return self;
+        }
+
+
+        public static IFlowBuilder PackedThen<TR1, TR2, TR3>(this IFlowBuilder self, Func<(TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TR1, TR2, TR3>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, (TR1, TR2, TR3)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3>(todo);
+            return self;
+        }
+        
+        public static IFlowBuilder PackedThen<TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<(TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TR1, TR2, TR3, TR4>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, (TR1, TR2, TR3, TR4)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4>(todo);
+            return self;
+        }
+
+
+        public static IFlowBuilder PackedThen<TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<(TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TR1, TR2, TR3, TR4, TR5>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, (TR1, TR2, TR3, TR4, TR5)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<(TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TR1, TR2, TR3, TR4, TR5, TR6>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, (TR1, TR2, TR3, TR4, TR5, TR6)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6>(todo);
+            return self;
+        }
+
+
+        public static IFlowBuilder PackedThen<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<(TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        public static IFlowBuilder PackedThen<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TR1, TR2, TR3, TR4, TR5, TR6, TR7>(this IFlowBuilder self, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, (TR1, TR2, TR3, TR4, TR5, TR6, TR7)> todo)
+        {
+            self.AddStep<TR1, TR2, TR3, TR4, TR5, TR6, TR7>(todo);
+            return self;
+        }
+
+        #endregion
 
     }
 }

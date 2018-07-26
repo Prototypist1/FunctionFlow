@@ -63,9 +63,7 @@ namespace Prototypist.FunctionGraph.Strong.CodeGen
             //.Add((Frog f) => new Cat(f))
             //.Add((Frog f) => new Cat(f))
             //    //.Add((int i)=> new Cat())
-
-            ;
-
+            
             //new Holder()
             //    .AddUnPack(() => (1, 2, 3, 4))
             //    .Add(() => 5)

@@ -340,8 +340,7 @@ namespace Prototypist.FunctionGraph
             }
             return null;
         }
-
-
+        
         #endregion
 
         private static LambdaExpression BuildExpression(
@@ -478,7 +477,6 @@ namespace Prototypist.FunctionGraph
 
             #endregion
         }
-        
         
         #region Static
 
