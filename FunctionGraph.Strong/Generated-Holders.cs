@@ -5,6 +5,8 @@ using Prototypist.FunctionGraph;
 namespace Prototypist.FunctionGraph.Strong
 {
 
+#region  BaseClass
+
     public class HolderBase<T1> : HolderBase, IHold<T1>
     {
     }
@@ -52,6 +54,9 @@ namespace Prototypist.FunctionGraph.Strong
     public class HolderBase<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> : HolderBase<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, IHold<T12>
     {
     }
+#endregion
+
+#region  Class
 
     public class Holder<T1> : HolderBase<T1>, IHolder<T1>
     {
@@ -262,6 +267,9 @@ namespace Prototypist.FunctionGraph.Strong
             FlowBuilder.SetConstant(t12);
         }
     }
+#endregion
+
+#region Interface
 
     public interface IHolder<T1> : IHack<Holder<T1>, Holder<T1>>
     {
@@ -310,5 +318,6 @@ namespace Prototypist.FunctionGraph.Strong
     public interface IHolder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> : IHack<Holder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, Holder<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>
     {
     }
+#endregion
 
 }

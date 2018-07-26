@@ -41,55 +41,23 @@ namespace Prototypist.FunctionGraph.Strong.CodeGen
         }
         public class Pig { }
 
+        #region MyRegion
+
+        #endregion
 
         static void Main(string[] args)
         {
-            //IHack<Holder<Frog>, Holder<Frog>> x = new Holder<Frog>(new Frog(1));//
-            //x.Add(() => 1);
-            //IHolder<Frog> y = new Holder<Frog>(new Frog(1));//
-            //y.Add(() => 1);
-            //var what =  new Holder<Frog>(new Frog(1));
-            //var whatWhat = what.Add(() => 1);
-            //var www = whatWhat.Update((int i) => i + 2);
-            ////HolderExtensions.Add<Holder<Frog>,Frog,int>(what, () => 1);
-            
-            //Holder<Frog> what2 = new Holder<Frog>(new Frog(1));
-            //what2.Add((Frog f) => 1);
+            WriteHolders();
+            WriteExtensions();
+        }
 
-            //Holder what3 = new Holder();
-            //what3.Add(() => 1);
-            //.Add(() => 1);//
-            //.Add((int i) => i + 1)
-            //.Add((Frog f) => new Cat(f))
-            //.Add((Frog f) => new Cat(f))
-            //    //.Add((int i)=> new Cat())
-            
-            //new Holder()
-            //    .AddUnPack(() => (1, 2, 3, 4))
-            //    .Add(() => 5)
-            //    .Add((int i)=> "");
-                //.Add((string s) => "");//.Add((Frog f)=>10);
-
-            var holders = "";
-            for (int classSize = 1; classSize <= MaxClassSize; classSize++)
-            {
-                holders += BaseClass(classSize);
-            }
-
-            for (int classSize = 1; classSize <= MaxClassSize; classSize++)
-            {
-                holders += Class(classSize);
-            }
-
-            for (int classSize = 1; classSize <= MaxClassSize; classSize++)
-            {
-                holders += Interface(classSize);
-            }
-            var holdersText = WrapNameSpace(holders);
-            File.WriteAllText("../../../FunctionGraph.Strong/Generated-Holders.cs", holdersText);
-
-
+        private static void WriteExtensions()
+        {
             var extensions = "";
+
+            extensions += Environment.NewLine;
+            extensions += $"#region {nameof(Add)}" + Environment.NewLine;
+
             for (int classSize = 0; classSize < MaxClassSize; classSize++)
             {
                 for (int inputSize = 0; inputSize <= classSize; inputSize++)
@@ -97,6 +65,10 @@ namespace Prototypist.FunctionGraph.Strong.CodeGen
                     extensions += Add(classSize, inputSize);
                 }
             }
+
+            extensions += "#endregion" + Environment.NewLine;
+            extensions += Environment.NewLine;
+            extensions += $"#region {nameof(Update)}" + Environment.NewLine;
 
             for (int classSize = 1; classSize <= MaxClassSize; classSize++)
             {
@@ -106,16 +78,24 @@ namespace Prototypist.FunctionGraph.Strong.CodeGen
                 }
             }
 
+            extensions += "#endregion" + Environment.NewLine;
+            extensions += Environment.NewLine;
+            extensions += $"#region {nameof(PackedAdd)}" + Environment.NewLine;
+
             for (int classSize = 0; classSize < MaxClassSize; classSize++)
             {
                 for (int inputSize = 0; inputSize <= classSize; inputSize++)
                 {
                     for (int outputSize = 2; outputSize + classSize <= MaxClassSize && outputSize <= MaxOutputSize; outputSize++)
                     {
-                        extensions += AddUpack(classSize, inputSize, outputSize);
+                        extensions += PackedAdd(classSize, inputSize, outputSize);
                     }
                 }
             }
+
+            extensions += "#endregion" + Environment.NewLine;
+            extensions += Environment.NewLine;
+            extensions += $"#region {nameof(PackedUpdate)}" + Environment.NewLine;
 
             for (int classSize = 2; classSize <= MaxClassSize; classSize++)
             {
@@ -123,14 +103,51 @@ namespace Prototypist.FunctionGraph.Strong.CodeGen
                 {
                     for (int outputSize = 2; classSize <= MaxClassSize && outputSize <= MaxOutputSize; outputSize++)
                     {
-                        extensions += UpdateUpack(classSize, inputSize, outputSize);
+                        extensions += PackedUpdate(classSize, inputSize, outputSize);
                     }
                 }
             }
 
+            extensions += "#endregion" + Environment.NewLine;
+
             var extensionsText = WrapNameSpace(WrapExtensions(extensions));
-            File.WriteAllText("../../../FunctionGraph.Strong/Generated-HolderExtensions.cs", extensionsText);
-            
+            File.WriteAllText("../../../../FunctionGraph.Strong/Generated-HolderExtensions.cs", extensionsText);
+        }
+
+        private static void WriteHolders()
+        {
+            var holders = "";
+
+            holders += Environment.NewLine;
+            holders += $"#region  {nameof(BaseClass)}" + Environment.NewLine;
+
+            for (int classSize = 1; classSize <= MaxClassSize; classSize++)
+            {
+                holders += BaseClass(classSize);
+            }
+
+            holders += "#endregion" + Environment.NewLine;
+            holders += Environment.NewLine;
+            holders += $"#region  {nameof(Class)}" + Environment.NewLine;
+
+            for (int classSize = 1; classSize <= MaxClassSize; classSize++)
+            {
+                holders += Class(classSize);
+            }
+
+            holders += "#endregion" + Environment.NewLine;
+            holders += Environment.NewLine;
+            holders += $"#region {nameof(Interface)}" + Environment.NewLine;
+
+            for (int classSize = 1; classSize <= MaxClassSize; classSize++)
+            {
+                holders += Interface(classSize);
+            }
+
+            holders += "#endregion" + Environment.NewLine;
+
+            var holdersText = WrapNameSpace(holders);
+            File.WriteAllText("../../../../FunctionGraph.Strong/Generated-Holders.cs", holdersText);
         }
 
         private static string WrapExtensions(string inner)
@@ -196,7 +213,7 @@ namespace Prototypist.FunctionGraph.Strong
 
         public static string Add(int n, int funcIn) {
             return $@"
-        public static {_IHolder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}TOut> Add<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn) + (funcIn == 0? "":", ") }TOut> func)
+        public static {_IHolder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}TOut> {nameof(Add)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn) + (funcIn == 0? "":", ") }TOut> func)
             where T{_Holder} : {_Holder}{(n != 0 ? "<":"")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}
         {{
             self.{_FlowBuilderProp}.{_Do}(func);
@@ -208,7 +225,7 @@ namespace Prototypist.FunctionGraph.Strong
         public static string Update(int n, int funcIn)
         {
             return $@"
-        public static {_IHolder}<{GenericTs(n)}> Update<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn) + (funcIn == 0 ? "" : ", ") }TOut> func)
+        public static {_IHolder}<{GenericTs(n)}> {nameof(Update)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn) + (funcIn == 0 ? "" : ", ") }TOut> func)
             where T{_Holder} : {_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}, {_IHold}<TOut>
         {{
             self.{_FlowBuilderProp}.{_Do}(func);
@@ -217,10 +234,10 @@ namespace Prototypist.FunctionGraph.Strong
 ";
         }
 
-        public static string AddUpack(int n, int funcIn, int funcOut)
+        public static string PackedAdd(int n, int funcIn, int funcOut)
         {
             return $@"
-        public static {_IHolder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}{GenericTOuts(funcOut)}> AddUnpack<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
+        public static {_IHolder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}{GenericTOuts(funcOut)}> {nameof(PackedAdd)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
             where T{_Holder} : {_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}
         {{
             self.{_FlowBuilderProp}.{_Do}(func);
@@ -229,10 +246,10 @@ namespace Prototypist.FunctionGraph.Strong
 ";
         }
 
-        public static string UpdateUpack(int n, int funcIn, int funcOut)
+        public static string PackedUpdate(int n, int funcIn, int funcOut)
         {
             return $@"
-        public static {_IHolder}<{GenericTs(n)}> UpdateUpack<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
+        public static {_IHolder}<{GenericTs(n)}> {nameof(PackedUpdate)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
             where T{_Holder} : {_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)} {HoldsOut(funcOut)}
         {{
             self.{_FlowBuilderProp}.{_Do}(func);
