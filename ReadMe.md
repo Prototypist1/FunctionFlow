@@ -4,7 +4,7 @@ Function Graph is a library that takes a set algorithms and wires them up togeth
 
 For example, take a composite algorithm that makes enchiladas. It naturally breaks down in to sub algorithms: chop onions, make the sauce, grate the cheese, etc.
 
-![Enchilada Algorithm](https://raw.github.com/Prototypist1/FunctionGraph/master/FunctionGraph.sln)
+![Enchilada Algorithm](https://raw.githubusercontent.com/Prototypist1/FunctionGraph/master/EnchiladaAlgorithm.png)
 
 Explicitly composed the code might look like this:
 
