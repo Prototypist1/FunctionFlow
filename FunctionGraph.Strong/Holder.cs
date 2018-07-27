@@ -19,23 +19,14 @@ namespace Prototypist.FunctionGraph.Strong
 
     }
 
-    public interface IHolder : IHack<Holder, Holder>
-    {
-    }
-
     public interface IHack<T1, T2>
     {
         FlowBuilder FlowBuilder { get; }
     }
+
+    public interface IHolder : IHack<Holder, Holder>{}
     
-    public class HolderBase: IHold
-    {
-
-    }
-
-
-    public interface IHold
-    {
-
-    }
+    public class HolderBase: IHold{ }
+    
+    public interface IHold {}
 }
