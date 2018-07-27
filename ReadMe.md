@@ -4,11 +4,9 @@ Function Graph is a library that takes a set algorithms and wires them up togeth
 
 For example, take a composite algorithm that makes enchiladas. It naturally breaks down in to sub algorithms: chop onions, make the sauce, grate the cheese, etc.
 
-![Enchilada Algorithm](https://raw.githubusercontent.com/Prototypist1/FunctionGraph/master/EnchiladaAlgorithm.png)
+![Enchilada Algorithm](https://raw.github.com/Prototypist1/FunctionGraph/master/FunctionGraph.sln)
 
-The thing is, given the sub-algorithms it is pretty easy to wire things togther using their inputs and output types. 
-
-Explicitly wired the code might look like this:
+Explicitly composed the code might look like this:
 
 ```C#
 public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth, Tortillas tortillas, Cheese cheese, Onion onion){
@@ -21,6 +19,8 @@ public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth,
     return Garnish(almost, sauce, chopped);
 }
 ```
+
+The thing is, given the sub-algorithms it is pretty easy to automatically wire things togther using their inputs and output types. Just go through all the the sub-algorthms in order. For each of the sub-algorithm's inputs find the youngest item of matching type that was output from one of the pervious sub-algorithms or provided as a parameter. This is exactly what function graph does.
 
 Using Function Graph the same code looks like:
 
@@ -38,12 +38,4 @@ public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth,
 }
 ```
 
-A few less characters, a little less mental strain and slightly more readable code. 
-
-
-They are a directed graph where nodes are functions and edges are the output of one function used as the input of another. 
-
-
-
-
-To be specific fg builds a delegate the executes collection of delegates.  
+So, a few less characters, a little less mental strain and slightly more readable code. At the cost of a little preformance and a little black magic.
