@@ -94,7 +94,7 @@ To return multiple times from the flow, add generic parameters to `Run`.
 ```C#
 var (name, value) = new FlowBuilder()
 	.PackedThen(() => ("Time", 1282368345))
-	.Run<string, int>();`
+	.Run<string, int>();
 ```
 ### Strong Typing
 
@@ -106,7 +106,7 @@ var year = new Holder()
 	.Update((int i) => i +1)
 	.Add(()=>"177")
 	.Update((string s, int i) => s + i)
-	.FlowBuilder.Run<string>()
+	.FlowBuilder.Run<string>();
 }
 ```
 
