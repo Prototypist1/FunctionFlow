@@ -115,7 +115,6 @@ var year = new Holder()
 - Plays poorly with containers. 
 - `Add` and `Update` must be specifically specified
 - Can only track up to 12 items
-- 
 
 
 
