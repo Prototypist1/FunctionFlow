@@ -75,32 +75,32 @@ namespace Prototypist.FunctionGraph
             }
         }
 
-        public void AddStep<T1, T2>(Delegate expression)
+        public void AddStepPacked<T1, T2>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1),typeof(T2)}));
         }
 
-        public void AddStep<T1, T2, T3>(Delegate expression)
+        public void AddStepPacked<T1, T2, T3>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3)}));
         }
 
-        public void AddStep<T1, T2, T3, T4>(Delegate expression)
+        public void AddStepPacked<T1, T2, T3, T4>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }));
         }
 
-        public void AddStep<T1, T2, T3, T4, T5>(Delegate expression)
+        public void AddStepPacked<T1, T2, T3, T4, T5>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) }));
         }
 
-        public void AddStep<T1, T2, T3, T4, T5, T6>(Delegate expression)
+        public void AddStepPacked<T1, T2, T3, T4, T5, T6>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6) }));
         }
 
-        public void AddStep<T1, T2, T3, T4, T5, T6, T7>(Delegate expression)
+        public void AddStepPacked<T1, T2, T3, T4, T5, T6, T7>(Delegate expression)
         {
             todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7)}));
         }
@@ -376,8 +376,14 @@ namespace Prototypist.FunctionGraph
             for (int i = 0; i < expressionInfos.Count; i++)
             {
                 var expressionInfo = expressionInfos[i];
-                var waitsOnOrder = expressionInfo.waitsOn.Select(x => x.order);
-                expressionInfo.order = waitsOnOrder.Any() ? waitsOnOrder.Max() + 1 : 0;
+                if (parallel != null)
+                {
+                    var waitsOnOrder = expressionInfo.waitsOn.Select(x => x.order);
+                    expressionInfo.order = waitsOnOrder.Any() ? waitsOnOrder.Max() + 1 : 0;
+                }
+                else {
+                    expressionInfo.order = i;
+                }
             }
 
             var body = expressionInfos.GroupBy(x => x.order).OrderBy(x => x.Key).SelectMany(group =>

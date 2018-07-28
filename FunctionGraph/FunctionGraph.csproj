@@ -10,7 +10,7 @@
     <Company />
     <Product />
     <Description>A library for conposing small algrothims</Description>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>Prototypist.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>

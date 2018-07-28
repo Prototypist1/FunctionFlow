@@ -11,12 +11,12 @@ namespace Prototypist.FunctionGraph
         void SetConstant<T>(T t);
         void SetSource<T>(T t) where T : Delegate;
         void AddStep(Delegate expression);
-        void AddStep<T1,T2>(Delegate expression);
-        void AddStep<T1, T2, T3>(Delegate expression);
-        void AddStep<T1, T2, T3, T4>(Delegate expression);
-        void AddStep<T1, T2, T3, T4, T5>(Delegate expression);
-        void AddStep<T1, T2, T3, T4, T5, T6>(Delegate expression);
-        void AddStep<T1, T2, T3, T4, T5, T6, T7>(Delegate expression);
+        void AddStepPacked<T1,T2>(Delegate expression);
+        void AddStepPacked<T1, T2, T3>(Delegate expression);
+        void AddStepPacked<T1, T2, T3, T4>(Delegate expression);
+        void AddStepPacked<T1, T2, T3, T4, T5>(Delegate expression);
+        void AddStepPacked<T1, T2, T3, T4, T5, T6>(Delegate expression);
+        void AddStepPacked<T1, T2, T3, T4, T5, T6, T7>(Delegate expression);
         void SetContainer(IContainer container);
 
         T Build<T>() where T : Delegate;

@@ -11,12 +11,13 @@ namespace Prototypist.FunctionGraph.Strong.CodeGen
 
     class Program
     {
-        private const string _FlowBuilderProp = nameof(Prototypist.FunctionGraph.Strong.Holder.FlowBuilder);
+        private const string _FlowBuilderProp = nameof(Prototypist.FunctionGraph.FlowBuilder);
         private const string _Holder = nameof(Prototypist.FunctionGraph.Strong.Holder);
         private const string _HolderBase = nameof(Prototypist.FunctionGraph.Strong.HolderBase);
         private const string _FlowBuilderType = nameof(Prototypist.FunctionGraph.FlowBuilder);
         private const string _Set = nameof(Prototypist.FunctionGraph.FlowBuilder.SetConstant);
-        private const string _Do = nameof(Prototypist.FunctionGraph.FlowBuilder.AddStep);
+        private const string _AddStep = nameof(Prototypist.FunctionGraph.FlowBuilder.AddStep);
+        private const string _AddStepPacked = nameof(Prototypist.FunctionGraph.FlowBuilder.AddStepPacked);
         private const string _IHold = nameof(Prototypist.FunctionGraph.Strong.IHold);
         private const string _IHolder = nameof(Prototypist.FunctionGraph.Strong.IHolder);
         private static readonly string _IHack = Name(typeof(Prototypist.FunctionGraph.Strong.IHack<,>));
@@ -186,6 +187,13 @@ namespace Prototypist.FunctionGraph.Strong
             return $@"
     public class {typeName} : {_HolderBase}{(n - 1 > 0 ? "<" : "")}{GenericTs(n - 1)}{(n - 1 > 0 ? ">" : "")}, {_IHold}<T{n}>
     {{
+        public HolderBase({_HolderBase} backing) : base(backing)
+        {{
+        }}
+
+        protected HolderBase({_FlowBuilderType} flowBuilder) : base(flowBuilder)
+        {{
+        }}
     }}
 ";
         }
@@ -197,12 +205,9 @@ namespace Prototypist.FunctionGraph.Strong
             return $@"
     public class {typeName} : {baseName}, {_IHolder}<{GenericTs(n)}>
     {{
-        public {_FlowBuilderType} {_FlowBuilderProp} {{ get; }}
-        public {_Holder}({_FlowBuilderType} backing) {{
-            {_FlowBuilderProp} = backing;
+        public {_Holder}({_HolderBase} backing): base(backing) {{
         }}
-        public {_Holder}({Parameters(n)}) {{
-            {_FlowBuilderProp} = new {_FlowBuilderType}();
+        public {_Holder}({Parameters(n)}): base(new {_FlowBuilderType}()) {{
 {Set(n)}
         }}
     }}
@@ -216,8 +221,8 @@ namespace Prototypist.FunctionGraph.Strong
         public static {_IHolder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}TOut> {nameof(Add)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn) + (funcIn == 0? "":", ") }TOut> func)
             where T{_Holder} : {_Holder}{(n != 0 ? "<":"")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}
         {{
-            self.{_FlowBuilderProp}.{_Do}(func);
-            return new {_Holder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}TOut>(self.{_FlowBuilderProp});
+            self.{_AddStep}(func);
+            return new {_Holder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}TOut>(({_HolderBase})self);
         }}
 ";
         }
@@ -228,8 +233,8 @@ namespace Prototypist.FunctionGraph.Strong
         public static {_IHolder}<{GenericTs(n)}> {nameof(Update)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn) + (funcIn == 0 ? "" : ", ") }TOut> func)
             where T{_Holder} : {_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}, {_IHold}<TOut>
         {{
-            self.{_FlowBuilderProp}.{_Do}(func);
-            return new {_Holder}<{GenericTs(n)}>(self.{_FlowBuilderProp});
+            self.{_AddStep}(func);
+            return new {_Holder}<{GenericTs(n)}>(({_HolderBase})self);
         }}
 ";
         }
@@ -240,8 +245,8 @@ namespace Prototypist.FunctionGraph.Strong
         public static {_IHolder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}{GenericTOuts(funcOut)}> {nameof(PackedAdd)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
             where T{_Holder} : {_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}
         {{
-            self.{_FlowBuilderProp}.{_Do}(func);
-            return new {_Holder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(self.{_FlowBuilderProp});
+            self.{_AddStepPacked}<{GenericTOuts(funcOut)}>(func);
+            return new {_Holder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(({_HolderBase})self);
         }}
 ";
         }
@@ -252,8 +257,8 @@ namespace Prototypist.FunctionGraph.Strong
         public static {_IHolder}<{GenericTs(n)}> {nameof(PackedUpdate)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
             where T{_Holder} : {_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)} {HoldsOut(funcOut)}
         {{
-            self.{_FlowBuilderProp}.{_Do}(func);
-            return new {_Holder}<{GenericTs(n)}>(self.{_FlowBuilderProp});
+            self.{_AddStepPacked}<{GenericTOuts(funcOut)}>(func);
+            return new {_Holder}<{GenericTs(n)}>(({_HolderBase})self);
         }}
 ";
         }
@@ -268,7 +273,7 @@ namespace Prototypist.FunctionGraph.Strong
             var res = "";
             for (int i = 0; i < n; i++)
             {
-                res += $"            {_FlowBuilderProp}.{_Set}(t{i + 1});" + (i != n-1?Environment.NewLine:"");
+                res += $"            {_Set}(t{i + 1});" + (i != n-1?Environment.NewLine:"");
             }
             return res;
         }

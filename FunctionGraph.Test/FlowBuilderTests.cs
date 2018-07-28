@@ -89,6 +89,17 @@ namespace Prototypist.FunctionGraph.Test
         }
 
         [Fact]
+        public void PackedThen()
+        {
+            var (name, value) = new FlowBuilder()
+                .PackedThen(() => ("Time", 1282368345))
+                .Run<string, int>();
+
+            Assert.Equal("Time", name);
+            Assert.Equal(1282368345, value);
+        }
+
+        [Fact]
         public void SetTest()
         {
             var res = new FlowBuilder().Set(5).Run<int>();
