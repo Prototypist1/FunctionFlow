@@ -2,15 +2,15 @@
 
 *Function Graph* is a library that takes a set of algorithms and wires them together in to a single composite algorithm. 
 
-For example, say your sub algorithms are chop onions, make sauce, grate cheese, brown tortillas, assemble, bake, and garnish, and your composite algorithm is making enchiladas. 
+For example, say your sub algorithms are: chop onions, mix sauce, grate cheese, fry tortillas, assemble, bake, and garnish, and your composite algorithm is making enchiladas. 
 
 ![Enchilada Algorithm](https://raw.githubusercontent.com/Prototypist1/FunctionGraph/master/EnchiladaAlgorithm.png)
 
-Explicitly composed the code might look like this:
+Explicitly composed, the code might look like this:
 
 ```C#
 public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth, Tortillas tortillas, Cheese cheese, Onion onion){
-    var sauce = Mix(oil, spices, flour, borth);
+    var sauce = Mix(oil, spices, flour, broth);
     var browned = Fry(oil, tortillas);
     var grated = Grate(cheese);
     var assembled = Assemble(sauce, browned, grated);
@@ -20,7 +20,7 @@ public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth,
 }
 ```
 
-The thing is, given the sub-algorithms it is pretty easy to automatically wire them togther using their inputs and output types. An algorithm can determine that, the result of `Assemble` must be fed in to `Bake` because `Bake` requires an `Assembled` and that is what `Assemble` produces. This generalizes, just go through all the the sub-algorthms in order. For each of the sub-algorithm's inputs find the youngest item of matching type that was output from one of the pervious sub-algorithms or provided as a parameter. This is exactly what function graph does.
+The thing is, it is pretty easy to wire the sub-algorithms together by matching their input types to output types. An algorithm can determine that the result of `Assemble` must be fed into `Bake` because `Bake` requires an `Assembled` and that is what `Assemble` produces. This generalizes. Run the sub-algorithms in order. For each of the sub-algorithm's inputs, find the youngest item of matching type that was output from one of the previous sub-algorithms or provided as a parameter. This is exactly what Function Graph does.
 
 Using Function Graph the same code looks like:
 
@@ -38,13 +38,13 @@ public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth,
 }
 ```
 
-So, a few less characters, a little less mental strain and slightly more readable code. At the cost of a some preformance, and a little less control over your code.
+So, fewer characters, a little less mental strain, and slightly more readable code, at the cost of some performance and a small amount of control.
 
 ## Features
 
 ### Parallelism 
 
-Function Graph can automatically parallelize your graph. Much like automatic wiring, automatic parallization is pretty simple. Each sub-algorithm is run as soon as all the sub-algorithms that produce it's inputs are finished.
+Function Graph can automatically parallelize your graph. Much like automatic wiring, automatic parallelization is pretty simple. Each sub-algorithm is run as soon as all the sub-algorithms that produce its inputs are finished.
 
 To make a flow parallel, just use the `RunInParallel` method. 
 
@@ -65,7 +65,7 @@ public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth,
 
 ### Dependency Injection Support
 
-Function Graph, pairs very well with dependency injection. It allows you not worry about feeding your graph with the right inputs. Instead the graph just pulls whatever it needs from the container. 
+Function Graph pairs very well with dependency injection. It allows you to not worry about feeding your graph with the right inputs. Instead, the graph just pulls whatever it needs from the container. 
 
 The container is used as a fallback when wiring functions together. Required inputs that are not produced by any sub algorithms or included as parameters are pulled from the container.
 
@@ -88,32 +88,33 @@ public Enchilada MakeEnchilada(IContainer pantry){
 
 ### Multiple Returns
 
-Function Graph uses tuples to handle multiple returns. `PackedThen` takes a function that return mutliple items 'packed' as a tuple. All the returned tuple's members are avalible to subiquent steps, but the tuple as a whole is not. (if you want the tuple to be avaible, use `Then`.) 
+Function Graph uses tuples to handle multiple returns. `PackedThen` takes a function that returns multiple items 'packed' as a tuple. All the returned tuple's members are available to subsequent steps, but the tuple as a whole is not. (If you want the tuple to be available, use `Then`.) 
 
-To return multiple times from the flow, add generic parameters to `Run`. The youngest items of the types requested are returned in a tuple.
+To return multiple items from the flow, add generic parameters to `Run`. The youngest items of the types requested are returned in a tuple.
 
 ```C#
 var (name, value) = new FlowBuilder()
-	.PackedThen(() => ("Time", 1282368345))
-	.Run<string, int>();
+    .PackedThen(() => ("Time", 1282368345))
+    .Then((string s)=> "Current "+ s)
+    .Run<string, int>();
 ```
 ### Strong Typing
 
-Function Graph largely abandons strong typing. I have made an attempt to add it back using generics and extensions methods. The "strongly typed" form of `FlowBuilder` is `Holder<...items...>`, likewise, `Then` is replaced by `Add` and `Update`. A `Holder`s simulate strong typing using extension methods, a `Holder` only has extension methods for functions whose inputs it contains. 
+Function Graph largely abandons strong typing. I have made an attempt to add it back using generics and extension methods. The "strongly typed" form of `FlowBuilder` is `Holder<...items...>`. Likewise, `Then` is replaced by `Add` and `Update`. A `Holder` simulates strong typing by only having extension methods for functions whose inputs it contains. For example, `Holder<int,string>` only has extension methods for methods of the form `(int i) => ...`, `(string s) => ...`, `(int i, string s) => ...` and, `(string s, int i)=> ...`.
 
 ```C#
 var year = new Holder()
-	.Add(()=>5)                             // now a IHolder<int>
-	.Update((int i) => i +1)                // still IHolder<int>
-	.Add(()=>"177")                         // now a IHolder<int,string>
-	.Update((string s, int i) => s + i)     // still IHolder<int,string>
-	.Run<string>();
+    .Add(()=>5)                             // now a IHolder<int>
+    .Update((int i) => i +1)                // still IHolder<int>
+    .Add(()=>"177")                         // now a IHolder<int,string>
+    .Update((string s, int i) => s + i)     // still IHolder<int,string>
+    .Run<string>();
 }
 ```
 
 #### Strong Typing Limitations
 
-- No support for containers. 
+- No support for containers
 - `Add` and `Update` must be specifically specified
 - Can only track up to 12 items
 
