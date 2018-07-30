@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Prototypist.FunctionGraph
+namespace Prototypist.FunctionFlow
 {
     internal static class TypeExtensions
     {

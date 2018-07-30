@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Prototypist.FunctionGraph
+namespace Prototypist.FunctionFlow
 {
     public interface IContainer
     {

@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Prototypist.FunctionGraph
+namespace Prototypist.FunctionFlow
 {
     
     public partial class FlowBuilder

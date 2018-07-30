@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Prototypist.FunctionGraph
+namespace Prototypist.FunctionFlow
 {
     internal static class  ExpressionExtensions{
         public static string GetDebugView(this Expression exp)

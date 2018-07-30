@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Prototypist.FunctionGraph
+namespace Prototypist.FunctionFlow
 {
     public partial class FlowBuilder
     {

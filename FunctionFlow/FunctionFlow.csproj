@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <FileUpgradeFlags>40</FileUpgradeFlags>
     <OldToolsVersion>15.0</OldToolsVersion>
-    <UpgradeBackupLocation>D:\FunctionGraph\Backup\</UpgradeBackupLocation>
-    <RootNamespace>Prototypist.FunctionGraph</RootNamespace>
+    <UpgradeBackupLocation>D:\FunctionFlow\Backup\</UpgradeBackupLocation>
+    <RootNamespace>Prototypist.FunctionFlow</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>Prototypist</Authors>
     <Company />
@@ -13,6 +13,7 @@
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>Prototypist.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <AssemblyName>FunctionFlow</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>7.3</LangVersion>

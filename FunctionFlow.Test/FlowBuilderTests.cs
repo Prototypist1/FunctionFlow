@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Prototypist.FunctionGraph.Test
+namespace Prototypist.FunctionFlow.Test
 {
     public class FlowBuilderTests
     {

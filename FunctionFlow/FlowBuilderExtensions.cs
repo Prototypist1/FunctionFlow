@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Prototypist.FunctionGraph
+namespace Prototypist.FunctionFlow
 {
     public static partial class FlowBuilderExtensions {
 

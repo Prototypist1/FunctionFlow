@@ -1,8 +1,8 @@
 
 using System;
-using Prototypist.FunctionGraph;
+using Prototypist.FunctionFlow;
 
-namespace Prototypist.FunctionGraph.Strong
+namespace Prototypist.FunctionFlow.Strong
 {
 
 #region  BaseClass

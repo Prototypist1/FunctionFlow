@@ -1,4 +1,4 @@
-using Prototypist.FunctionGraph.Strong;
+using Prototypist.FunctionFlow.Strong;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,21 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Prototypist.FunctionGraph.Strong.CodeGen
+namespace Prototypist.FunctionFlow.Strong.CodeGen
 {
 
     class Program
     {
-        private const string _FlowBuilderProp = nameof(Prototypist.FunctionGraph.FlowBuilder);
-        private const string _Holder = nameof(Prototypist.FunctionGraph.Strong.Holder);
-        private const string _HolderBase = nameof(Prototypist.FunctionGraph.Strong.HolderBase);
-        private const string _FlowBuilderType = nameof(Prototypist.FunctionGraph.FlowBuilder);
-        private const string _Set = nameof(Prototypist.FunctionGraph.FlowBuilder.SetConstant);
-        private const string _AddStep = nameof(Prototypist.FunctionGraph.FlowBuilder.AddStep);
-        private const string _AddStepPacked = nameof(Prototypist.FunctionGraph.FlowBuilder.AddStepPacked);
-        private const string _IHold = nameof(Prototypist.FunctionGraph.Strong.IHold);
-        private const string _IHolder = nameof(Prototypist.FunctionGraph.Strong.IHolder);
-        private static readonly string _IHack = Name(typeof(Prototypist.FunctionGraph.Strong.IHack<,>));
+        private const string _FlowBuilderProp = nameof(Prototypist.FunctionFlow.FlowBuilder);
+        private const string _Holder = nameof(Prototypist.FunctionFlow.Strong.Holder);
+        private const string _HolderBase = nameof(Prototypist.FunctionFlow.Strong.HolderBase);
+        private const string _FlowBuilderType = nameof(Prototypist.FunctionFlow.FlowBuilder);
+        private const string _Set = nameof(Prototypist.FunctionFlow.FlowBuilder.SetConstant);
+        private const string _AddStep = nameof(Prototypist.FunctionFlow.FlowBuilder.AddStep);
+        private const string _AddStepPacked = nameof(Prototypist.FunctionFlow.FlowBuilder.AddStepPacked);
+        private const string _IHold = nameof(Prototypist.FunctionFlow.Strong.IHold);
+        private const string _IHolder = nameof(Prototypist.FunctionFlow.Strong.IHolder);
+        private static readonly string _IHack = Name(typeof(Prototypist.FunctionFlow.Strong.IHack<,>));
         private const int MaxOutputSize = 2;
         private const int MaxClassSize = 12;
 
@@ -41,10 +41,7 @@ namespace Prototypist.FunctionGraph.Strong.CodeGen
             }
         }
         public class Pig { }
-
-        #region MyRegion
-
-        #endregion
+        
 
         static void Main(string[] args)
         {
@@ -164,9 +161,9 @@ namespace Prototypist.FunctionGraph.Strong.CodeGen
         {
             return $@"
 using System;
-using Prototypist.FunctionGraph;
+using Prototypist.FunctionFlow;
 
-namespace Prototypist.FunctionGraph.Strong
+namespace Prototypist.FunctionFlow.Strong
 {{
 {inner}
 }}";

@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Prototypist.FunctionGraph
+namespace Prototypist.FunctionFlow
 {
     public interface IFlowBuilder
     {

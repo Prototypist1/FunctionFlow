@@ -1,6 +1,6 @@
 # About
 
-*Function Graph* is a library that takes a set of algorithms and wires them together in to a single composite algorithm. 
+*Function Flow* is a library that takes a set of algorithms and wires them together in to a single composite algorithm. 
 
 For example, say your sub algorithms are: chop onions, mix sauce, grate cheese, fry tortillas, assemble, bake, and garnish, and your composite algorithm is making enchiladas. 
 
@@ -20,9 +20,9 @@ public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth,
 }
 ```
 
-The thing is, it is pretty easy to wire the sub-algorithms together by matching their input types to output types. An algorithm can determine that the result of `Assemble` must be fed into `Bake` because `Bake` requires an `Assembled` and that is what `Assemble` produces. This generalizes. Run the sub-algorithms in order. For each of the sub-algorithm's inputs, find the youngest item of matching type that was output from one of the previous sub-algorithms or provided as a parameter. This is exactly what Function Graph does.
+The thing is, it is pretty easy to wire the sub-algorithms together by matching their input types to output types. An algorithm can determine that the result of `Assemble` must be fed into `Bake` because `Bake` requires an `Assembled` and that is what `Assemble` produces. This generalizes. Run the sub-algorithms in order. For each of the sub-algorithm's inputs, find the youngest item of matching type that was output from one of the previous sub-algorithms or provided as a parameter. This is exactly what Function Flow does.
 
-Using Function Graph the same code looks like:
+Using Function Flow the same code looks like:
 
 ```C#
 public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth, Tortillas tortillas, Cheese cheese, Onion onion){
@@ -44,7 +44,7 @@ So, fewer characters, a little less mental strain, and slightly more readable co
 
 ### Parallelism 
 
-Function Graph can automatically parallelize your graph. Much like automatic wiring, automatic parallelization is pretty simple. Each sub-algorithm is run as soon as all the sub-algorithms that produce its inputs are finished.
+Function Flow can automatically parallelize your flow. Much like automatic wiring, automatic parallelization is pretty simple. Each sub-algorithm is run as soon as all the sub-algorithms that produce its inputs are finished.
 
 To make a flow parallel, just use the `RunInParallel` method. 
 
@@ -65,7 +65,7 @@ public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth,
 
 ### Dependency Injection Support
 
-Function Graph pairs very well with dependency injection. It allows you to not worry about feeding your graph with the right inputs. Instead, the graph just pulls whatever it needs from the container. 
+Function Flow pairs very well with dependency injection. It allows you to not worry about feeding your flow with the right inputs. Instead, the flow just pulls whatever it needs from the container. 
 
 The container is used as a fallback when wiring functions together. Required inputs that are not produced by any sub algorithms or included as parameters are pulled from the container.
 
@@ -88,7 +88,7 @@ public Enchilada MakeEnchilada(IContainer pantry){
 
 ### Multiple Returns
 
-Function Graph uses tuples to handle multiple returns. `PackedThen` takes a function that returns multiple items 'packed' as a tuple. All the returned tuple's members are available to subsequent steps, but the tuple as a whole is not. (If you want the tuple to be available, use `Then`.) 
+Function Flow uses tuples to handle multiple returns. `PackedThen` takes a function that returns multiple items 'packed' as a tuple. All the returned tuple's members are available to subsequent steps, but the tuple as a whole is not. (If you want the tuple to be available, use `Then`.) 
 
 To return multiple items from the flow, add generic parameters to `Run`. The youngest items of the types requested are returned in a tuple.
 
@@ -100,7 +100,7 @@ var (name, value) = new FlowBuilder()
 ```
 ### Strong Typing
 
-Function Graph largely abandons strong typing. I have made an attempt to add it back using generics and extension methods. The "strongly typed" form of `FlowBuilder` is `Holder<...items...>`. Likewise, `Then` is replaced by `Add` and `Update`. A `Holder` simulates strong typing by only having extension methods for functions whose inputs it contains. For example, `Holder<int,string>` only has extension methods for methods of the form `(int i) => ...`, `(string s) => ...`, `(int i, string s) => ...` and, `(string s, int i)=> ...`.
+Function Flow largely abandons strong typing. I have made an attempt to add it back using generics and extension methods. The "strongly typed" form of `FlowBuilder` is `Holder<...items...>`. Likewise, `Then` is replaced by `Add` and `Update`. A `Holder` simulates strong typing by only having extension methods for functions whose inputs it contains. For example, `Holder<int,string>` only has extension methods for methods of the form `(int i) => ...`, `(string s) => ...`, `(int i, string s) => ...` and, `(string s, int i)=> ...`.
 
 ```C#
 var year = new Holder()
