@@ -26,6 +26,11 @@ namespace Prototypist.FunctionGraph
                 this.Inputs = new Expression[ParameterTypes.Count()];
             }
 
+
+            /// <param name="expressionInfo">returnTypes must not be null</param>
+            internal bool SameOutput(ExpressionInfo expressionInfo) =>
+                returnTypes?.SequenceEqual(expressionInfo.returnTypes) ?? false;
+            
         }
     }
 }

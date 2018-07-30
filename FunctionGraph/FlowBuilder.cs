@@ -13,7 +13,7 @@ namespace Prototypist.FunctionGraph
     {
         T Get<T>();
     }
-        
+
     public partial class FlowBuilder : IFlowBuilder
     {
         public MethodInfo Parallel { get; set; } = null;
@@ -77,12 +77,12 @@ namespace Prototypist.FunctionGraph
 
         public void AddStepPacked<T1, T2>(Delegate expression)
         {
-            todo.Add(new WorkItem(expression, new[] { typeof(T1),typeof(T2)}));
+            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2) }));
         }
 
         public void AddStepPacked<T1, T2, T3>(Delegate expression)
         {
-            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3)}));
+            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3) }));
         }
 
         public void AddStepPacked<T1, T2, T3, T4>(Delegate expression)
@@ -102,7 +102,7 @@ namespace Prototypist.FunctionGraph
 
         public void AddStepPacked<T1, T2, T3, T4, T5, T6, T7>(Delegate expression)
         {
-            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7)}));
+            todo.Add(new WorkItem(expression, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7) }));
         }
 
         #endregion
@@ -303,11 +303,9 @@ namespace Prototypist.FunctionGraph
         {
             return x =>
             {
-                var res = new List<Expression>();
-                var returnTarget = Expression.Label(type);
-                res.Add(Expression.Return(returnTarget, x.Single()));
-                res.Add(Expression.Label(returnTarget, Expression.Convert(Expression.Constant(GetDefault(type)), type)));
-                return res.ToArray();
+                return new Expression[]{
+                     x.Single()
+                };
             };
         }
 
@@ -315,12 +313,10 @@ namespace Prototypist.FunctionGraph
         {
             return x =>
             {
-                var res = new List<Expression>();
-                var returnTarget = Expression.Label(type);
                 var constructor = type.GetConstructor(type.GetGenericArguments());
-                res.Add(Expression.Return(returnTarget, Expression.New(constructor, x)));
-                res.Add(Expression.Label(returnTarget, Expression.Constant(GetDefault(type))));
-                return res.ToArray();
+                return new Expression[] {
+                     Expression.New(constructor, x)
+                };
             };
         }
 
@@ -332,15 +328,7 @@ namespace Prototypist.FunctionGraph
             return type => parameters.Single(x => x.Type == type);
         }
 
-        private static object GetDefault(Type type)
-        {
-            if (type.IsValueType)
-            {
-                return Activator.CreateInstance(type);
-            }
-            return null;
-        }
-        
+
         #endregion
 
         private static LambdaExpression BuildExpression(
@@ -351,6 +339,8 @@ namespace Prototypist.FunctionGraph
             ParameterExpression[] parameters,
             List<WorkItem> todo)
         {
+            var dict = new Dictionary<Type, ParameterExpression>();
+
             var expressionInfos = todo.Select(x => new ExpressionInfo(x)).ToList();
 
             // discover dependency chain
@@ -361,7 +351,15 @@ namespace Prototypist.FunctionGraph
                 {
                     var parmType = expressionInfo.ParameterTypes[parmIndex];
                     expressionInfo.Inputs[parmIndex] = FindInput(expressionInfo, parmType, i);
-
+                }
+                if (expressionInfo.returnTypes != null && expressionInfo.returnTypes.Count() != 0) {
+                    for (int j = i - 1; j >= 0; j--)
+                    {
+                        var otherExpressionInfo = expressionInfos[j];
+                        if (otherExpressionInfo.SameOutput(expressionInfo)) {
+                            expressionInfo.waitsOn.Add(otherExpressionInfo);
+                        }
+                    }
                 }
             }
 
@@ -401,7 +399,7 @@ namespace Prototypist.FunctionGraph
                     else
                     {
                         var lamddasParameter = Expression.Constant(group.Select(x => Expression.Lambda<Action>(Expression.Block(MakeSingle(x)))).Select(x => x.Compile()).ToArray());
-                            return new List<Expression> {
+                        return new List<Expression> {
                             Expression.Call(parallel, lamddasParameter)
                         };
                     }
@@ -410,7 +408,14 @@ namespace Prototypist.FunctionGraph
 
             body.AddRange(addReturn(results));
 
-            return Expression.Lambda(Expression.Block(body), parameters);
+            var extraParameters = dict.Select(x => x.Value).ToArray();
+            var allParameters = extraParameters.Concat(parameters).ToArray();
+
+            var inner = Expression.Lambda(Expression.Block(body), allParameters);
+
+            var agrs = extraParameters.Select(x => Expression.Constant(GetDefault(x.Type),x.Type)).Concat(parameters.Cast<Expression>()).ToArray();
+            
+            return Expression.Lambda(Expression.Invoke(inner, agrs), parameters);
 
             #region Help
 
@@ -433,12 +438,18 @@ namespace Prototypist.FunctionGraph
                 }
                 return res;
             }
-
+            
             Expression GetVar(Type t)
             {
-                var type = typeof(GetVarBackingHack<>).MakeGenericType(t);
-                var holdShit = Expression.Constant(Activator.CreateInstance(type));
-                return Expression.Field(holdShit, type.GetField($"thing"));
+                if (dict.TryGetValue(t, out var res))
+                {
+                    return res;
+                }
+                else {
+                    var newVal = Expression.Parameter(t,t.Name.ToLower());
+                    dict[t] = newVal;
+                    return newVal;
+                }
             }
 
             Expression FindInput(ExpressionInfo expressionOrNull, Type parmType, int startAt)
@@ -481,9 +492,18 @@ namespace Prototypist.FunctionGraph
 
             }
 
+            object GetDefault(Type type)
+            {
+                if (type.IsValueType)
+                {
+                    return Activator.CreateInstance(type);
+                }
+                return null;
+            }
+
             #endregion
         }
-        
+
         #region Static
 
         private static readonly Lazy<Type[]> valueTypeArray = new Lazy<Type[]>(() => {
@@ -495,7 +515,7 @@ namespace Prototypist.FunctionGraph
                     typeof(ValueTuple<,,,,>),
                     typeof(ValueTuple<,,,,,>),
                 };
-            });
+        });
 
         #endregion
     }

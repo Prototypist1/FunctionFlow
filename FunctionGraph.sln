@@ -5,11 +5,16 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionGraph", "FunctionGraph\FunctionGraph.csproj", "{A6283C7F-3DC2-403C-AE47-E5AD924C6A5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph.Strong", "FunctionGraph.Strong\FunctionGraph.Strong.csproj", "{C66A1319-5451-4C86-BB8D-75E71D6315C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionGraph.Strong", "FunctionGraph.Strong\FunctionGraph.Strong.csproj", "{C66A1319-5451-4C86-BB8D-75E71D6315C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph.Strong.CodeGen", "FunctionGraph.Strong.CodeGen\FunctionGraph.Strong.CodeGen.csproj", "{EEE2D861-3015-4143-83E8-73D4EC1F7B51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionGraph.Strong.CodeGen", "FunctionGraph.Strong.CodeGen\FunctionGraph.Strong.CodeGen.csproj", "{EEE2D861-3015-4143-83E8-73D4EC1F7B51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionGraph.Test", "FunctionGraph.Test\FunctionGraph.Test.csproj", "{8836C40A-27C9-40A2-842D-8945366E86AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionGraph.Test", "FunctionGraph.Test\FunctionGraph.Test.csproj", "{8836C40A-27C9-40A2-842D-8945366E86AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5778BB29-8A72-482C-A84E-13258FC7E99F}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.md = ReadMe.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,7 +85,6 @@ Global
 		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{8836C40A-27C9-40A2-842D-8945366E86AB}.Debug|x86.Build.0 = Debug|Any CPU
 		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|ARM.ActiveCfg = Release|Any CPU
 		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|ARM.Build.0 = Release|Any CPU
 		{8836C40A-27C9-40A2-842D-8945366E86AB}.Release|x64.ActiveCfg = Release|Any CPU

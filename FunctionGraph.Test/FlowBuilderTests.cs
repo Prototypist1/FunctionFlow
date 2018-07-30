@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -33,7 +34,7 @@ namespace Prototypist.FunctionGraph.Test
             new FlowBuilder()
                 .Then(() => 2)
                 .Then((int i) => i + "")
-                .Then<int,int>(inc)
+                .Then<int, int>(inc)
                 .Then<int, int>(inc)
                 .Then<int, int>(inc)
                 .Then<int, int>(inc)
@@ -74,16 +75,30 @@ namespace Prototypist.FunctionGraph.Test
         public void ParameterTest()
         {
             var finalInt = 0;
-            
-            new FlowBuilder().Then<int,int>(x => x + 1).Then<int>(x => finalInt = x).Run(10);
+
+            new FlowBuilder().Then<int, int>(x => x + 1).Then<int>(x => finalInt = x).Run(10);
 
             Assert.Equal(11, finalInt);
         }
 
         [Fact]
+        public void PassThroughTest()
+        {
+            Assert.Equal(10, new FlowBuilder().Run<int>(10));
+        }
+
+        [Fact]
+        public void SimpleTest()
+        {
+            Assert.Equal(1, new FlowBuilder().Then(() => 1).Run<int>());
+        }
+
+        [Fact]
         public void ReturnTest()
         {
-            var res = new FlowBuilder().Then<int,int>(x => x + 1).Run<int>(10);
+            var res = new FlowBuilder().Then<int, int>(x =>
+             x + 1
+            ).Run<int>(10);
 
             Assert.Equal(11, res);
         }
@@ -137,7 +152,7 @@ namespace Prototypist.FunctionGraph.Test
         [Fact]
         public void CompileFuncTest()
         {
-            var addOne = new FlowBuilder().Then<int,int>(x => x + 1).Build<Func<int, int>>();
+            var addOne = new FlowBuilder().Then<int, int>(x => x + 1).Build<Func<int, int>>();
 
             Assert.Equal(11, addOne(10));
             Assert.Equal(0, addOne(-1));
@@ -147,13 +162,36 @@ namespace Prototypist.FunctionGraph.Test
         public void CompileActionTest()
         {
             var finalInt = 0;
-            
-            var action = new FlowBuilder().Then<int>(x => finalInt=x).Build<Action<int>>();
+
+            var action = new FlowBuilder().Then<int>(x => finalInt = x).Build<Action<int>>();
 
             action(10);
             Assert.Equal(10, finalInt);
             action(0);
             Assert.Equal(0, finalInt);
+        }
+
+        [Fact]
+        public void ParallelCompileActionTest()
+        {
+            var function = new FlowBuilder().Then((int x) => x + 1).Then((int x) => x + 1).Then((int x) => x + 1).Then((int x) => x + 1).Build<Func<int, int>>();
+
+            Parallel.For(0, 1000, (i) =>
+            {
+                Assert.Equal(i + 4, function(i));
+            });
+        }
+
+        [Fact]
+        public void OutputOrdering()
+        {
+            var flow = new FlowBuilder().RunInParallel();
+            for (int j = 0; j < 100; j++)
+            {
+                var i = j;
+                flow.Then(() => i);
+            }
+            Assert.Equal(99, flow.Run<int>());
         }
 
         [Fact]
