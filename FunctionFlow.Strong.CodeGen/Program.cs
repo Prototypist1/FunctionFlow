@@ -11,15 +11,16 @@ namespace Prototypist.FunctionFlow.Strong.CodeGen
 
     class Program
     {
+        private const string _FunctionFlow = nameof(Prototypist.FunctionFlow);
         private const string _FlowBuilderProp = nameof(Prototypist.FunctionFlow.FlowBuilder);
-        private const string _Holder = nameof(Prototypist.FunctionFlow.Strong.Holder);
-        private const string _HolderBase = nameof(Prototypist.FunctionFlow.Strong.HolderBase);
+        private const string _StrongFlow = nameof(Prototypist.FunctionFlow.Strong.StrongFlow);
+        private const string _StrongFlowBase = nameof(Prototypist.FunctionFlow.Strong.StrongFlowBase);
         private const string _FlowBuilderType = nameof(Prototypist.FunctionFlow.FlowBuilder);
         private const string _Set = nameof(Prototypist.FunctionFlow.FlowBuilder.SetConstant);
         private const string _AddStep = nameof(Prototypist.FunctionFlow.FlowBuilder.AddStep);
         private const string _AddStepPacked = nameof(Prototypist.FunctionFlow.FlowBuilder.AddStepPacked);
         private const string _IHold = nameof(Prototypist.FunctionFlow.Strong.IHold);
-        private const string _IHolder = nameof(Prototypist.FunctionFlow.Strong.IHolder);
+        private const string _IStrongFlow = nameof(Prototypist.FunctionFlow.Strong.IStrongFlow);
         private static readonly string _IHack = Name(typeof(Prototypist.FunctionFlow.Strong.IHack<,>));
         private const int MaxOutputSize = 2;
         private const int MaxClassSize = 12;
@@ -64,6 +65,7 @@ namespace Prototypist.FunctionFlow.Strong.CodeGen
                 }
             }
 
+            extensions += Environment.NewLine;
             extensions += "#endregion" + Environment.NewLine;
             extensions += Environment.NewLine;
             extensions += $"#region {nameof(Update)}" + Environment.NewLine;
@@ -76,6 +78,7 @@ namespace Prototypist.FunctionFlow.Strong.CodeGen
                 }
             }
 
+            extensions += Environment.NewLine;
             extensions += "#endregion" + Environment.NewLine;
             extensions += Environment.NewLine;
             extensions += $"#region {nameof(PackedAdd)}" + Environment.NewLine;
@@ -91,6 +94,7 @@ namespace Prototypist.FunctionFlow.Strong.CodeGen
                 }
             }
 
+            extensions += Environment.NewLine;
             extensions += "#endregion" + Environment.NewLine;
             extensions += Environment.NewLine;
             extensions += $"#region {nameof(PackedUpdate)}" + Environment.NewLine;
@@ -109,7 +113,7 @@ namespace Prototypist.FunctionFlow.Strong.CodeGen
             extensions += "#endregion" + Environment.NewLine;
 
             var extensionsText = WrapNameSpace(WrapExtensions(extensions));
-            File.WriteAllText("../../../../FunctionGraph.Strong/Generated-HolderExtensions.cs", extensionsText);
+            File.WriteAllText($"../../../../{_FunctionFlow}.Strong/Generated-{_StrongFlow}Extensions.cs", extensionsText);
         }
 
         private static void WriteHolders()
@@ -124,6 +128,7 @@ namespace Prototypist.FunctionFlow.Strong.CodeGen
                 holders += BaseClass(classSize);
             }
 
+            holders += Environment.NewLine;
             holders += "#endregion" + Environment.NewLine;
             holders += Environment.NewLine;
             holders += $"#region  {nameof(Class)}" + Environment.NewLine;
@@ -133,6 +138,7 @@ namespace Prototypist.FunctionFlow.Strong.CodeGen
                 holders += Class(classSize);
             }
 
+            holders += Environment.NewLine;
             holders += "#endregion" + Environment.NewLine;
             holders += Environment.NewLine;
             holders += $"#region {nameof(Interface)}" + Environment.NewLine;
@@ -145,13 +151,13 @@ namespace Prototypist.FunctionFlow.Strong.CodeGen
             holders += "#endregion" + Environment.NewLine;
 
             var holdersText = WrapNameSpace(holders);
-            File.WriteAllText("../../../../FunctionGraph.Strong/Generated-Holders.cs", holdersText);
+            File.WriteAllText($"../../../../{_FunctionFlow}.Strong/Generated-{_StrongFlow}s.cs", holdersText);
         }
 
         private static string WrapExtensions(string inner)
         {
             return $@"
-    public static class HolderExtensions
+    public static class {_StrongFlow}Extensions
     {{
 {inner}
     }}";
@@ -161,9 +167,9 @@ namespace Prototypist.FunctionFlow.Strong.CodeGen
         {
             return $@"
 using System;
-using Prototypist.FunctionFlow;
+using Prototypist.{_FunctionFlow};
 
-namespace Prototypist.FunctionFlow.Strong
+namespace Prototypist.{_FunctionFlow}.Strong
 {{
 {inner}
 }}";
@@ -171,7 +177,7 @@ namespace Prototypist.FunctionFlow.Strong
 
         static string Interface(int n) {
             return $@"
-    public interface {_IHolder}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")} : {_IHack}<{_Holder}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")}, {_Holder}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")}>
+    public interface {_IStrongFlow}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")} : {_IHack}<{_StrongFlow}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")}, {_StrongFlow}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")}>
     {{
     }}
 ";
@@ -179,16 +185,16 @@ namespace Prototypist.FunctionFlow.Strong
 
         static string BaseClass(int n)
         {
-            var typeName = $"{_HolderBase}<{GenericTs(n)}>";
+            var typeName = $"{_StrongFlowBase}<{GenericTs(n)}>";
 
             return $@"
-    public class {typeName} : {_HolderBase}{(n - 1 > 0 ? "<" : "")}{GenericTs(n - 1)}{(n - 1 > 0 ? ">" : "")}, {_IHold}<T{n}>
+    public class {typeName} : {_StrongFlowBase}{(n - 1 > 0 ? "<" : "")}{GenericTs(n - 1)}{(n - 1 > 0 ? ">" : "")}, {_IHold}<T{n}>
     {{
-        public HolderBase({_HolderBase} backing) : base(backing)
+        public {_StrongFlowBase}({_StrongFlowBase} backing) : base(backing)
         {{
         }}
 
-        protected HolderBase({_FlowBuilderType} flowBuilder) : base(flowBuilder)
+        protected {_StrongFlowBase}({_FlowBuilderType} flowBuilder) : base(flowBuilder)
         {{
         }}
     }}
@@ -196,15 +202,15 @@ namespace Prototypist.FunctionFlow.Strong
         }
 
         static string Class(int n) {
-            var baseName = $"{_HolderBase}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")}";
-            var typeName = $"{_Holder}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")}";
+            var baseName = $"{_StrongFlowBase}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")}";
+            var typeName = $"{_StrongFlow}{(n > 0 ? "<" : "")}{GenericTs(n)}{(n > 0 ? ">" : "")}";
             
             return $@"
-    public class {typeName} : {baseName}, {_IHolder}<{GenericTs(n)}>
+    public class {typeName} : {baseName}, {_IStrongFlow}<{GenericTs(n)}>
     {{
-        public {_Holder}({_HolderBase} backing): base(backing) {{
+        public {_StrongFlow}({_StrongFlowBase} backing): base(backing) {{
         }}
-        public {_Holder}({Parameters(n)}): base(new {_FlowBuilderType}()) {{
+        public {_StrongFlow}({Parameters(n)}): base(new {_FlowBuilderType}()) {{
 {Set(n)}
         }}
     }}
@@ -215,11 +221,11 @@ namespace Prototypist.FunctionFlow.Strong
 
         public static string Add(int n, int funcIn) {
             return $@"
-        public static {_IHolder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}TOut> {nameof(Add)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn) + (funcIn == 0? "":", ") }TOut> func)
-            where T{_Holder} : {_Holder}{(n != 0 ? "<":"")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}
+        public static {_IStrongFlow}<{GenericTs(n)}{(n == 0 ? "" : ", ")}TOut> {nameof(Add)}<T{_StrongFlow}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_StrongFlow}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_StrongFlow}> self, Func<{GenericTIns(funcIn) + (funcIn == 0? "":", ") }TOut> func)
+            where T{_StrongFlow} : {_StrongFlow}{(n != 0 ? "<":"")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}
         {{
             self.{_AddStep}(func);
-            return new {_Holder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}TOut>(({_HolderBase})self);
+            return new {_StrongFlow}<{GenericTs(n)}{(n == 0 ? "" : ", ")}TOut>(({_StrongFlowBase})self);
         }}
 ";
         }
@@ -227,11 +233,11 @@ namespace Prototypist.FunctionFlow.Strong
         public static string Update(int n, int funcIn)
         {
             return $@"
-        public static {_IHolder}<{GenericTs(n)}> {nameof(Update)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn) + (funcIn == 0 ? "" : ", ") }TOut> func)
-            where T{_Holder} : {_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}, {_IHold}<TOut>
+        public static {_IStrongFlow}<{GenericTs(n)}> {nameof(Update)}<T{_StrongFlow}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ",")}{GenericTIns(funcIn)}, TOut>(this {_IHack}<{_StrongFlow}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_StrongFlow}> self, Func<{GenericTIns(funcIn) + (funcIn == 0 ? "" : ", ") }TOut> func)
+            where T{_StrongFlow} : {_StrongFlow}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}, {_IHold}<TOut>
         {{
             self.{_AddStep}(func);
-            return new {_Holder}<{GenericTs(n)}>(({_HolderBase})self);
+            return new {_StrongFlow}<{GenericTs(n)}>(({_StrongFlowBase})self);
         }}
 ";
         }
@@ -239,11 +245,11 @@ namespace Prototypist.FunctionFlow.Strong
         public static string PackedAdd(int n, int funcIn, int funcOut)
         {
             return $@"
-        public static {_IHolder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}{GenericTOuts(funcOut)}> {nameof(PackedAdd)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
-            where T{_Holder} : {_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}
+        public static {_IStrongFlow}<{GenericTs(n)}{(n == 0 ? "" : ", ")}{GenericTOuts(funcOut)}> {nameof(PackedAdd)}<T{_StrongFlow}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_StrongFlow}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_StrongFlow}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
+            where T{_StrongFlow} : {_StrongFlow}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)}
         {{
             self.{_AddStepPacked}<{GenericTOuts(funcOut)}>(func);
-            return new {_Holder}<{GenericTs(n)}{(n == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(({_HolderBase})self);
+            return new {_StrongFlow}<{GenericTs(n)}{(n == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(({_StrongFlowBase})self);
         }}
 ";
         }
@@ -251,11 +257,11 @@ namespace Prototypist.FunctionFlow.Strong
         public static string PackedUpdate(int n, int funcIn, int funcOut)
         {
             return $@"
-        public static {_IHolder}<{GenericTs(n)}> {nameof(PackedUpdate)}<T{_Holder}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_Holder}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
-            where T{_Holder} : {_Holder}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)} {HoldsOut(funcOut)}
+        public static {_IStrongFlow}<{GenericTs(n)}> {nameof(PackedUpdate)}<T{_StrongFlow}{(n == 0 ? "" : ", ")}{GenericTs(n)}{(funcIn == 0 ? "" : ", ")}{GenericTIns(funcIn)}{(funcOut == 0 ? "" : ", ")}{GenericTOuts(funcOut)}>(this {_IHack}<{_StrongFlow}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")}, T{_StrongFlow}> self, Func<{GenericTIns(funcIn)}{(funcIn == 0 ? "" : ", ")}({GenericTOuts(funcOut)})> func)
+            where T{_StrongFlow} : {_StrongFlow}{(n != 0 ? "<" : "")}{GenericTs(n)}{(n != 0 ? ">" : "")} {Holds(funcIn)} {HoldsOut(funcOut)}
         {{
             self.{_AddStepPacked}<{GenericTOuts(funcOut)}>(func);
-            return new {_Holder}<{GenericTs(n)}>(({_HolderBase})self);
+            return new {_StrongFlow}<{GenericTs(n)}>(({_StrongFlowBase})self);
         }}
 ";
         }

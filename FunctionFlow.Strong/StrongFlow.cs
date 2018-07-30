@@ -5,30 +5,34 @@ using Prototypist.FunctionFlow;
 namespace Prototypist.FunctionFlow.Strong
 {
 
-    public class Holder : HolderBase, IHolder
+    public class StrongFlow : StrongFlowBase, IStrongFlow
     {
-        public Holder(HolderBase backing):base(backing)
+        public StrongFlow(StrongFlowBase backing):base(backing)
         {
         }
-        public Holder() : base(new FlowBuilder())
+        public StrongFlow() : base(new FlowBuilder())
         {
         }
     }
 
+    // we need two conditions on the extension methods
+    // we are limited to one condition per type
+    // so we cature the type twice:
+    // T1 == T2
     public interface IHack<T1, T2>: IHold
     {
     }
 
-    public interface IHolder : IHack<Holder, Holder>{}
+    public interface IStrongFlow : IHack<StrongFlow, StrongFlow>{}
 
-    public abstract class HolderBase : IHold
+    public abstract class StrongFlowBase : IHold
     {
-        public HolderBase(HolderBase backing)
+        public StrongFlowBase(StrongFlowBase backing)
         {
             this.FlowBuilder = backing?.FlowBuilder ?? throw new ArgumentNullException(nameof(backing));
         }
 
-        public HolderBase(FlowBuilder flowBuilder)
+        public StrongFlowBase(FlowBuilder flowBuilder)
         {
             this.FlowBuilder = flowBuilder ?? throw new ArgumentNullException(nameof(flowBuilder));
         }

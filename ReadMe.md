@@ -100,14 +100,14 @@ var (name, value) = new FlowBuilder()
 ```
 ### Strong Typing
 
-Function Flow largely abandons strong typing. I have made an attempt to add it back using generics and extension methods. The "strongly typed" form of `FlowBuilder` is `Holder<...items...>`. Likewise, `Then` is replaced by `Add` and `Update`. A `Holder` simulates strong typing by only having extension methods for functions whose inputs it contains. For example, `Holder<int,string>` only has extension methods for methods of the form `(int i) => ...`, `(string s) => ...`, `(int i, string s) => ...` and, `(string s, int i)=> ...`.
+Function Flow largely abandons strong typing. I have made an attempt to add it back using generics and extension methods. The "strongly typed" form of `FlowBuilder` is `IStrongFlow<...items...>`. Likewise, `Then` is replaced by `Add` and `Update`. A `StrongFlow` simulates strong typing by only having extension methods for functions whose inputs it contains. For example, `StrongFlow<int,string>` only has extension methods for methods of the form `(int i) => ...`, `(string s) => ...`, `(int i, string s) => ...` and, `(string s, int i)=> ...`.
 
 ```C#
-var year = new Holder()
-    .Add(()=>5)                             // now a IHolder<int>
-    .Update((int i) => i +1)                // still IHolder<int>
-    .Add(()=>"177")                         // now a IHolder<int,string>
-    .Update((string s, int i) => s + i)     // still IHolder<int,string>
+var year = new StrongFlow()
+    .Add(()=>5)                             // now a IStrongFlow<int>
+    .Update((int i) => i +1)                // still IStrongFlow<int>
+    .Add(()=>"177")                         // now a IStrongFlow<int,string>
+    .Update((string s, int i) => s + i)     // still IStrongFlow<int,string>
     .Run<string>();
 }
 ```
