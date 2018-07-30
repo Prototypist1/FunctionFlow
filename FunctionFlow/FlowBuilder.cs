@@ -16,7 +16,7 @@ namespace Prototypist.FunctionFlow
 
     public partial class FlowBuilder : IFlowBuilder
     {
-        public MethodInfo Parallel { get; set; } = null;
+        public bool Parallel { get; set; } = false;
 
         private readonly Dictionary<Type, Delegate> sources = new Dictionary<Type, Delegate>();
         private readonly Dictionary<Type, Expression> constants = new Dictionary<Type, Expression>();
@@ -333,13 +333,13 @@ namespace Prototypist.FunctionFlow
 
         private static LambdaExpression BuildExpression(
             Func<Type, Func<Type, Expression>, Expression> getParameter,
-            MethodInfo parallel,
+            bool parallel,
             Type[] returns,
             Func<Expression[], Expression[]> addReturn,
             ParameterExpression[] parameters,
             List<WorkItem> todo)
         {
-            var dict = new Dictionary<Type, ParameterExpression>();
+            var resultsDict = new Dictionary<Type, ParameterExpression>();
 
             var expressionInfos = todo.Select(x => new ExpressionInfo(x)).ToList();
 
@@ -371,53 +371,118 @@ namespace Prototypist.FunctionFlow
                 results[i] = FindInput(null, type, expressionInfos.Count);
             }
 
-            for (int i = 0; i < expressionInfos.Count; i++)
-            {
-                var expressionInfo = expressionInfos[i];
-                if (parallel != null)
+            //for (int i = 0; i < expressionInfos.Count; i++)
+            //{
+            //    var expressionInfo = expressionInfos[i];
+            //    if (parallel != null)
+            //    {
+            //        var waitsOnOrder = expressionInfo.waitsOn.Select(x => x.order);
+            //        expressionInfo.order = waitsOnOrder.Any() ? waitsOnOrder.Max() + 1 : 0;
+            //    }
+            //    else {
+            //        expressionInfo.order = i;
+            //    }
+            //}
+            
+            var body = expressionInfos.SelectMany(expressionInfo => {
+                if (parallel)
                 {
-                    var waitsOnOrder = expressionInfo.waitsOn.Select(x => x.order);
-                    expressionInfo.order = waitsOnOrder.Any() ? waitsOnOrder.Max() + 1 : 0;
-                }
-                else {
-                    expressionInfo.order = i;
-                }
-            }
 
-            var body = expressionInfos.GroupBy(x => x.order).OrderBy(x => x.Key).SelectMany(group =>
-            {
-                if (group.Count() == 1)
-                {
-                    return MakeSingle(group.First());
-                }
-                else
-                {
-                    if (parallel == null)
+                    expressionInfo.task = Expression.Parameter(typeof(Task));
+                    var tasks = expressionInfo.waitsOn.Select(x => x.task).Cast<Expression>().ToArray();
+                    if (tasks.Any())
                     {
-                        return group.SelectMany(x => MakeSingle(x));
+                        var whenAll = taskWhenAll.Value;
+                        var wait = Expression.Call(whenAll, Expression.NewArrayInit(typeof(Task), tasks));
+
+                        var lambda = MakeTaskLambda(expressionInfo);
+                        var run = Expression.Call(wait, taskContinueWith.Value, lambda);
+                        return new List<Expression> { Expression.Assign(expressionInfo.task, run) };
                     }
-                    else
-                    {
-                        var lamddasParameter = Expression.Constant(group.Select(x => Expression.Lambda<Action>(Expression.Block(MakeSingle(x)))).Select(x => x.Compile()).ToArray());
-                        return new List<Expression> {
-                            Expression.Call(parallel, lamddasParameter)
-                        };
+                    else {
+                        var lambda = MakeLambda(expressionInfo);
+                        return new List<Expression> { Expression.Assign(expressionInfo.task, Expression.Call(taskRun.Value, lambda)) };
                     }
                 }
+                return MakeSingle(expressionInfo);
             }).ToList();
+
+            //var body = expressionInfos.GroupBy(x => x.order).OrderBy(x => x.Key).SelectMany(group =>
+            //{
+            //    if (group.Count() == 1)
+            //    {
+            //        return MakeSingle(group.First());
+            //    }
+            //    else
+            //    {
+            //        if (parallel == null)
+            //        {
+            //            return group.SelectMany(x => MakeSingle(x));
+            //        }
+            //        else
+            //        {
+
+
+            //            var lamddasParameter = Expression.Constant(group.Select(x => Expression.Lambda<Action>(Expression.Block(MakeSingle(x)))).Select(x => x.Compile()).ToArray());
+            //            return new List<Expression> {
+            //                Expression.Call(parallel, lamddasParameter)
+            //            };
+            //        }
+            //    }
+            //}).ToList();
+
+            if (parallel) {
+                var tasks = expressionInfos.Select(x => x.task).ToArray();
+                var whenAll = Expression.Call(taskWhenAll.Value, Expression.NewArrayInit(typeof(Task), tasks));
+                var wait = Expression.Call(whenAll, taskWait.Value);
+                body.Add(wait);
+            }
 
             body.AddRange(addReturn(results));
 
-            var extraParameters = dict.Select(x => x.Value).ToArray();
-            var allParameters = extraParameters.Concat(parameters).ToArray();
+            var extraParametersBuilder = resultsDict.Select(x => x.Value);
+            if (parallel)
+            {
+                extraParametersBuilder = extraParametersBuilder.Concat(expressionInfos.Select(x => x.task));
+            }
+            var extraParameters = extraParametersBuilder.ToArray();
+
+            var allParameters = extraParameters.Concat(parameters);
 
             var inner = Expression.Lambda(Expression.Block(body), allParameters);
 
             var agrs = extraParameters.Select(x => Expression.Constant(GetDefault(x.Type),x.Type)).Concat(parameters.Cast<Expression>()).ToArray();
-            
-            return Expression.Lambda(Expression.Invoke(inner, agrs), parameters);
+            var final = Expression.Lambda(Expression.Invoke(inner, agrs), parameters);
+
+            return final;
 
             #region Help
+
+            Expression MakeTaskLambda(ExpressionInfo target) {
+
+                //var type = actionArray.Value[lambdaParams.Length];
+
+                //if (lambdaParams.Any())
+                //{
+                //    type = type.MakeGenericType(lambdaParams.Select(x => typeof(Task)).ToArray());
+                //}
+
+                return Expression.Lambda<Action<Task>>(Expression.Block(MakeSingle(target)), new ParameterExpression[] { Expression.Parameter(typeof(Task)) });
+            }
+
+
+            Expression MakeLambda(ExpressionInfo target)
+            {
+
+                //var type = actionArray.Value[lambdaParams.Length];
+
+                //if (lambdaParams.Any())
+                //{
+                //    type = type.MakeGenericType(lambdaParams.Select(x => typeof(Task)).ToArray());
+                //}
+
+                return Expression.Lambda<Action>(Expression.Block(MakeSingle(target)));
+            }
 
             List<Expression> MakeSingle(ExpressionInfo target)
             {
@@ -441,19 +506,20 @@ namespace Prototypist.FunctionFlow
             
             Expression GetVar(Type t)
             {
-                if (dict.TryGetValue(t, out var res))
+                if (resultsDict.TryGetValue(t, out var res))
                 {
                     return res;
                 }
                 else {
                     var newVal = Expression.Parameter(t,t.Name.ToLower());
-                    dict[t] = newVal;
+                    resultsDict[t] = newVal;
                     return newVal;
                 }
             }
 
             Expression FindInput(ExpressionInfo expressionOrNull, Type parmType, int startAt)
             {
+                Expression input = null;
                 for (int j = startAt - 1; j >= 0; j--)
                 {
                     var sourceExpressionInfo = expressionInfos[j];
@@ -471,7 +537,10 @@ namespace Prototypist.FunctionFlow
                                 {
                                     sourceExpressionInfo.Result = GetVar(tupleType);
                                 }
-                                return Expression.Field(sourceExpressionInfo.Result, tupleType.GetField("Item" + (k + 1)));
+                                if (input == null)
+                                {
+                                    input = Expression.Field(sourceExpressionInfo.Result, tupleType.GetField("Item" + (k + 1)));
+                                }
                             }
                         }
                     }
@@ -484,11 +553,20 @@ namespace Prototypist.FunctionFlow
                             {
                                 sourceExpressionInfo.Result = GetVar(parmType);
                             }
-                            return sourceExpressionInfo.Result;
+                            if (input == null)
+                            {
+                                input = sourceExpressionInfo.Result;
+                            }
                         }
                     }
                 }
-                return getParameter(parmType, t => FindInput(null, t, startAt));
+
+                if (input == null)
+                {
+                    input =  getParameter(parmType, t => FindInput(null, t, startAt));
+                }
+
+                return input;
 
             }
 
@@ -506,6 +584,40 @@ namespace Prototypist.FunctionFlow
 
         #region Static
 
+        private static Lazy<MethodInfo> taskWait = new Lazy<MethodInfo>(() => typeof(Task)
+            .GetMethods()
+            .Where(x => 
+                x.Name == "Wait" && 
+                !x.IsGenericMethod && 
+                x.GetParameters().Count() == 0)
+            .Single());
+
+        private static Lazy<MethodInfo> taskWhenAll = new Lazy<MethodInfo>(() => typeof(Task)
+            .GetMethods()
+            .Where(x => 
+            x.Name == "WhenAll" && 
+                !x.IsGenericMethod && 
+                x.GetParameters().Count() == 1 
+                && x.GetParameters().Single().ParameterType == typeof(Task[]))
+            .Single());
+
+        private static Lazy<MethodInfo> taskContinueWith = new Lazy<MethodInfo>(() => typeof(Task)
+            .GetMethods()
+            .Where(x => 
+                x.Name == "ContinueWith" && 
+                !x.IsGenericMethod && 
+                x.GetParameters().Count() == 1)
+            .Single());
+        
+        private static Lazy<MethodInfo> taskRun = new Lazy<MethodInfo>(() => typeof(Task)
+            .GetMethods()
+            .Where(x => 
+                x.Name == "Run" && 
+                !x.IsGenericMethod && 
+                x.GetParameters().Count() == 1 && 
+                x.GetParameters().Single().ParameterType == typeof(Action))
+            .Single());
+
         private static readonly Lazy<Type[]> valueTypeArray = new Lazy<Type[]>(() => {
             return new Type[]{
                     typeof(ValueTuple<>),
@@ -514,6 +626,28 @@ namespace Prototypist.FunctionFlow
                     typeof(ValueTuple<,,,>),
                     typeof(ValueTuple<,,,,>),
                     typeof(ValueTuple<,,,,,>),
+                };
+        });
+
+        private static readonly Lazy<Type[]> actionArray = new Lazy<Type[]>(() => {
+            return new Type[]{
+                    typeof(Action),
+                    typeof(Action<>),
+                    typeof(Action<,>),
+                    typeof(Action<,,>),
+                    typeof(Action<,,,>),
+                    typeof(Action<,,,,>),
+                    typeof(Action<,,,,,>),
+                    typeof(Action<,,,,,,>),
+                    typeof(Action<,,,,,,,>),
+                    typeof(Action<,,,,,,,,>),
+                    typeof(Action<,,,,,,,,,>),
+                    typeof(Action<,,,,,,,,,,>),
+                    typeof(Action<,,,,,,,,,,,>),
+                    typeof(Action<,,,,,,,,,,,,>),
+                    typeof(Action<,,,,,,,,,,,,,>),
+                    typeof(Action<,,,,,,,,,,,,,,>),
+                    typeof(Action<,,,,,,,,,,,,,,,>),
                 };
         });
 

@@ -14,6 +14,7 @@ namespace Prototypist.FunctionFlow
             public readonly Expression[] Inputs;
             public int order = 0;
             public Expression Result = null;
+            public ParameterExpression task = null;
             public readonly List<ExpressionInfo> waitsOn = new List<ExpressionInfo>();
             public readonly Type[] returnTypes;
             public readonly Type[] ParameterTypes;

@@ -7,8 +7,7 @@ namespace Prototypist.FunctionFlow
 {
     public static partial class FlowBuilderExtensions {
 
-        private static Lazy<MethodInfo> parallelInboke = new Lazy<MethodInfo>(() => typeof(Parallel).GetMethods().Where(x => x.Name == "Invoke" && x.GetParameters().Count() == 1).Single());
-
+        
         public static IFlowBuilder Set<T>(this IFlowBuilder self, T t) {
             self.SetConstant<T>(t);
             return self;
@@ -22,7 +21,7 @@ namespace Prototypist.FunctionFlow
 
         public static IFlowBuilder RunInParallel(this IFlowBuilder self)
         {
-            self.Parallel = parallelInboke.Value;
+            self.Parallel = true;
             return self;
         }
 

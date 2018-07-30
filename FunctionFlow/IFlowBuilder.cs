@@ -6,7 +6,7 @@ namespace Prototypist.FunctionFlow
 {
     public interface IFlowBuilder
     {
-        MethodInfo Parallel { get; set; }
+        bool Parallel { get; set; }
 
         void SetConstant<T>(T t);
         void SetSource<T>(T t) where T : Delegate;

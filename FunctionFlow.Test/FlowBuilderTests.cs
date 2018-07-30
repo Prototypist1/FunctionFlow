@@ -174,7 +174,11 @@ namespace Prototypist.FunctionFlow.Test
         [Fact]
         public void ParallelCompileActionTest()
         {
-            var function = new FlowBuilder().Then((int x) => x + 1).Then((int x) => x + 1).Then((int x) => x + 1).Then((int x) => x + 1).Build<Func<int, int>>();
+            var function = new FlowBuilder()
+                .Then((int x) => x + 1)
+                .Then((int x) => x + 1)
+                .Then((int x) => x + 1)
+                .Then((int x) => x + 1).Build<Func<int, int>>();
 
             Parallel.For(0, 1000, (i) =>
             {
@@ -213,6 +217,81 @@ namespace Prototypist.FunctionFlow.Test
 
             Assert.InRange(TimeSpan.FromTicks(end - start), TimeSpan.FromSeconds(.1), TimeSpan.FromSeconds(.2));
 
+        }
+
+        [Fact]
+        public void ParallelPairs() {
+
+            Func<int,int> waitInt= i => {
+                Task.Delay(100).Wait();
+                return i + 1;
+            };
+
+            Func<string, string> waitString = s => {
+                Task.Delay(100).Wait();
+                return s + "1";
+            };
+
+            var start = DateTime.Now.Ticks;
+
+            var (resInt,resStr)= new FlowBuilder()
+                .RunInParallel()
+                .Then(waitInt)
+                .Then(waitInt)
+                .Then(waitInt)
+                .Then(waitString)
+                .Then(waitString)
+                .Then(waitString)
+                .Run<int,string>(0,"");
+
+            var end = DateTime.Now.Ticks;
+
+            Assert.Equal(3, resInt);
+            Assert.Equal("111", resStr);
+            Assert.InRange(TimeSpan.FromTicks(end - start), TimeSpan.FromSeconds(.3), TimeSpan.FromSeconds(.4));
+        }
+
+        [Fact]
+        public void ParallelPairsLongShort()
+        {
+
+            Func<int, int> waitIntLong = i => {
+                Task.Delay(100).Wait();
+                return i + 1;
+            };
+
+            Func<int, int> waitIntShort = i => {
+                return i + 1;
+            };
+
+            Func<string, string> waitStringLong = s => {
+                Task.Delay(100).Wait();
+                return s + "1";
+            };
+
+            Func<string, string> waitStringShort = i => {
+                return i + "1";
+            };
+
+            var start = DateTime.Now.Ticks;
+
+            var (resInt, resStr) = new FlowBuilder()
+                .RunInParallel()
+                .Then(waitIntLong)
+                .Then(waitIntShort)
+                .Then(waitIntLong)
+                .Then(waitIntShort)
+                .Then(waitStringShort)
+                .Then(waitStringLong)
+                .Then(waitStringShort)
+                .Then(waitStringLong)
+                .Run<int, string>(0, "");
+
+            var end = DateTime.Now.Ticks;
+
+            Assert.Equal(4, resInt);
+            Assert.Equal("1111", resStr);
+            Assert.InRange(TimeSpan.FromTicks(end - start), TimeSpan.FromSeconds(.2), TimeSpan.FromSeconds(.3));
         }
 
         [Fact]
