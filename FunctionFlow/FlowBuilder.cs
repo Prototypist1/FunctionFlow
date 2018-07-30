@@ -357,7 +357,10 @@ namespace Prototypist.FunctionFlow
                     {
                         var otherExpressionInfo = expressionInfos[j];
                         if (otherExpressionInfo.SameOutput(expressionInfo)) {
-                            expressionInfo.waitsOn.Add(otherExpressionInfo);
+                            if (!expressionInfo.WillWaitFor(otherExpressionInfo))
+                            {
+                                expressionInfo.waitsOn.Add(otherExpressionInfo);
+                            }
                         }
                     }
                 }
@@ -370,21 +373,8 @@ namespace Prototypist.FunctionFlow
                 var type = returns[i];
                 results[i] = FindInput(null, type, expressionInfos.Count);
             }
-
-            //for (int i = 0; i < expressionInfos.Count; i++)
-            //{
-            //    var expressionInfo = expressionInfos[i];
-            //    if (parallel != null)
-            //    {
-            //        var waitsOnOrder = expressionInfo.waitsOn.Select(x => x.order);
-            //        expressionInfo.order = waitsOnOrder.Any() ? waitsOnOrder.Max() + 1 : 0;
-            //    }
-            //    else {
-            //        expressionInfo.order = i;
-            //    }
-            //}
             
-            var body = expressionInfos.SelectMany(expressionInfo => {
+            var body = expressionInfos.Select(expressionInfo => {
                 if (parallel)
                 {
 
@@ -397,40 +387,16 @@ namespace Prototypist.FunctionFlow
 
                         var lambda = MakeTaskLambda(expressionInfo);
                         var run = Expression.Call(wait, taskContinueWith.Value, lambda);
-                        return new List<Expression> { Expression.Assign(expressionInfo.task, run) };
+                        return Expression.Assign(expressionInfo.task, run);
                     }
                     else {
                         var lambda = MakeLambda(expressionInfo);
-                        return new List<Expression> { Expression.Assign(expressionInfo.task, Expression.Call(taskRun.Value, lambda)) };
+                        return Expression.Assign(expressionInfo.task, Expression.Call(taskRun.Value, lambda));
                     }
                 }
                 return MakeSingle(expressionInfo);
             }).ToList();
-
-            //var body = expressionInfos.GroupBy(x => x.order).OrderBy(x => x.Key).SelectMany(group =>
-            //{
-            //    if (group.Count() == 1)
-            //    {
-            //        return MakeSingle(group.First());
-            //    }
-            //    else
-            //    {
-            //        if (parallel == null)
-            //        {
-            //            return group.SelectMany(x => MakeSingle(x));
-            //        }
-            //        else
-            //        {
-
-
-            //            var lamddasParameter = Expression.Constant(group.Select(x => Expression.Lambda<Action>(Expression.Block(MakeSingle(x)))).Select(x => x.Compile()).ToArray());
-            //            return new List<Expression> {
-            //                Expression.Call(parallel, lamddasParameter)
-            //            };
-            //        }
-            //    }
-            //}).ToList();
-
+            
             if (parallel) {
                 var tasks = expressionInfos.Select(x => x.task).ToArray();
                 var whenAll = Expression.Call(taskWhenAll.Value, Expression.NewArrayInit(typeof(Task), tasks));
@@ -451,6 +417,10 @@ namespace Prototypist.FunctionFlow
 
             var inner = Expression.Lambda(Expression.Block(body), allParameters);
 
+            if (!extraParameters.Any()) {
+                return inner;
+            }
+
             var agrs = extraParameters.Select(x => Expression.Constant(GetDefault(x.Type),x.Type)).Concat(parameters.Cast<Expression>()).ToArray();
             var final = Expression.Lambda(Expression.Invoke(inner, agrs), parameters);
 
@@ -459,49 +429,37 @@ namespace Prototypist.FunctionFlow
             #region Help
 
             Expression MakeTaskLambda(ExpressionInfo target) {
-
-                //var type = actionArray.Value[lambdaParams.Length];
-
-                //if (lambdaParams.Any())
-                //{
-                //    type = type.MakeGenericType(lambdaParams.Select(x => typeof(Task)).ToArray());
-                //}
-
-                return Expression.Lambda<Action<Task>>(Expression.Block(MakeSingle(target)), new ParameterExpression[] { Expression.Parameter(typeof(Task)) });
+                return Expression.Lambda<Action<Task>>(MakeSingle(target), new ParameterExpression[] { Expression.Parameter(typeof(Task)) });
             }
 
 
             Expression MakeLambda(ExpressionInfo target)
             {
+                var expression = MakeSingle(target);
+                
+                if (expression is Expression<Action>) {
+                    return expression;
+                }
 
-                //var type = actionArray.Value[lambdaParams.Length];
-
-                //if (lambdaParams.Any())
-                //{
-                //    type = type.MakeGenericType(lambdaParams.Select(x => typeof(Task)).ToArray());
-                //}
-
-                return Expression.Lambda<Action>(Expression.Block(MakeSingle(target)));
+                return Expression.Lambda<Action>(expression);
             }
 
-            List<Expression> MakeSingle(ExpressionInfo target)
+            Expression MakeSingle(ExpressionInfo target)
             {
-                var res = new List<Expression>();
                 var innerParameters = new List<Expression>();
                 for (var i = 0; i < target.ParameterTypes.Length; i++)
                 {
                     var input = target.Inputs[i];
-                    innerParameters.Add(Expression.Convert(input, target.ParameterTypes[i]));
+                    innerParameters.Add(input);
                 }
                 if (target.Result != null)
                 {
-                    res.Add(Expression.Assign(target.Result, Expression.Invoke(target.backing, innerParameters)));
+                    return Expression.Assign(target.Result, Expression.Invoke(target.backing, innerParameters));
                 }
                 else
                 {
-                    res.Add(Expression.Invoke(target.backing, innerParameters));
+                    return Expression.Invoke(target.backing, innerParameters);
                 }
-                return res;
             }
             
             Expression GetVar(Type t)
@@ -531,7 +489,10 @@ namespace Prototypist.FunctionFlow
                         {
                             if (sourceExpressionInfo.returnTypes[k] == parmType)
                             {
-                                expressionOrNull?.waitsOn?.Add(sourceExpressionInfo);
+                                if (!(expressionOrNull?.WillWaitFor(sourceExpressionInfo) ?? true))
+                                {
+                                    expressionOrNull?.waitsOn?.Add(sourceExpressionInfo);
+                                }
                                 var tupleType = valueTypeArray.Value[sourceExpressionInfo.returnTypes.Length - 1].MakeGenericType(sourceExpressionInfo.returnTypes);
                                 if (sourceExpressionInfo.Result == null)
                                 {
@@ -548,7 +509,10 @@ namespace Prototypist.FunctionFlow
                     {
                         if (sourceExpressionInfo.returnTypes[0] == parmType)
                         {
-                            expressionOrNull?.waitsOn?.Add(sourceExpressionInfo);
+                            if (!(expressionOrNull?.WillWaitFor(sourceExpressionInfo)?? true))
+                            {
+                                expressionOrNull?.waitsOn?.Add(sourceExpressionInfo);
+                            }
                             if (sourceExpressionInfo.Result == null)
                             {
                                 sourceExpressionInfo.Result = GetVar(parmType);

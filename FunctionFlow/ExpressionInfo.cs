@@ -12,7 +12,6 @@ namespace Prototypist.FunctionFlow
         {
             public readonly Expression backing;
             public readonly Expression[] Inputs;
-            public int order = 0;
             public Expression Result = null;
             public ParameterExpression task = null;
             public readonly List<ExpressionInfo> waitsOn = new List<ExpressionInfo>();
@@ -31,7 +30,12 @@ namespace Prototypist.FunctionFlow
             /// <param name="expressionInfo">returnTypes must not be null</param>
             internal bool SameOutput(ExpressionInfo expressionInfo) =>
                 returnTypes?.SequenceEqual(expressionInfo.returnTypes) ?? false;
-            
+            internal bool WillWaitFor(ExpressionInfo sourceExpressionInfo) {
+                if (sourceExpressionInfo == this) {
+                    return true;
+                }
+                return waitsOn?.Any(x => x.WillWaitFor(sourceExpressionInfo)) ?? false;
+            }
         }
     }
 }
