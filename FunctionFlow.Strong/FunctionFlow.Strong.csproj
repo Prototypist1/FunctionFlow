@@ -14,6 +14,11 @@
     <FileVersion>1.0.0.0</FileVersion>
     <Version>1.0.1</Version>
     <AssemblyName>FunctionFlow.Strong</AssemblyName>
+    <RepositoryType>git</RepositoryType>
+    <PackageIconUrl>https://raw.githubusercontent.com/Prototypist1/FunctionGraph/master/icon.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Prototypist1/FunctionFlow</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Prototypist1/FunctionFlow</RepositoryUrl>
+    <Copyright>2018 Colin Wielga</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

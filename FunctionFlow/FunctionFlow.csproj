@@ -14,6 +14,11 @@
     <AssemblyOriginatorKeyFile>Prototypist.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <AssemblyName>FunctionFlow</AssemblyName>
+    <Copyright>2018 Colin Wielga</Copyright>
+    <PackageProjectUrl>https://github.com/Prototypist1/FunctionFlow</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Prototypist1/FunctionGraph/master/icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/Prototypist1/FunctionFlow</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>7.3</LangVersion>

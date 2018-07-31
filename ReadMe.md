@@ -120,3 +120,5 @@ var year = new StrongFlow()
 
 
 
+![Flow](https://raw.githubusercontent.com/Prototypist1/FunctionGraph/master/icon.png)
+
