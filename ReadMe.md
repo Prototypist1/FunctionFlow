@@ -118,7 +118,3 @@ var year = new StrongFlow()
 - `Add` and `Update` must be specifically specified
 - Can only track up to 12 items
 
-
-
-![Flow](https://raw.githubusercontent.com/Prototypist1/FunctionGraph/master/icon.png)
-
