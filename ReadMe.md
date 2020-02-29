@@ -38,7 +38,7 @@ public Enchilada MakeEnchilada(Oil oil, Spices spices, Flour flour, Broth broth,
 }
 ```
 
-So, fewer characters, a little less mental strain, and slightly more readable code, at the cost of some performance and a small amount of control.
+So, fewer characters, a little less mental strain, and slightly more readable code, at the cost of some performance and control.
 
 ## Features
 
