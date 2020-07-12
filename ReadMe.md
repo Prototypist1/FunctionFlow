@@ -100,7 +100,7 @@ var (name, value) = new FlowBuilder()
 ```
 ### Strong Typing
 
-Function Flow largely abandons strong typing. I have made an attempt to add it back using generics and extension methods. The "strongly typed" form of `FlowBuilder` is `IStrongFlow<...items...>`. Likewise, `Then` is replaced by `Add` and `Update`. A `StrongFlow` simulates strong typing by only having extension methods for functions whose inputs it contains. For example, `StrongFlow<int,string>` only has extension methods for methods of the form `(int i) => ...`, `(string s) => ...`, `(int i, string s) => ...` and, `(string s, int i)=> ...`.
+One of the down sides of function flow is, the flow is not verified at compile time. If one of your steps requires something that is not in the flow you will be blissfully unware until runtime. I have make an attempt to rectify this using generics and extension methods. The "strongly typed" form of `FlowBuilder` is `IStrongFlow<...items...>`. Instead of `Then` it uses `Add` and `Update`. A `StrongFlow` simulates strong typing by only having extension methods for functions whose inputs it contains. For example, `StrongFlow<int,string>` only has extension methods for methods of the form `(int i) => ...`, `(string s) => ...`, `(int i, string s) => ...` and, `(string s, int i)=> ...`.
 
 ```C#
 var year = new StrongFlow()
